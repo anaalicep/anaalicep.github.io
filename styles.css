@@ -1,0 +1,167 @@
+:root {
+  --bg: #14161a;
+  --bg-alt: #1b1e24;
+  --text: #e8e8ea;
+  --text-muted: #a3a7b0;
+  --accent: #7aa2f7;
+  --border: #2a2d34;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 48px 24px 64px;
+}
+
+.site-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.site-header h1 {
+  font-size: 1.6rem;
+  margin: 0;
+}
+
+.site-header h1 a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.site-header nav a {
+  margin-left: 20px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.site-header nav a:first-child {
+  margin-left: 0;
+}
+
+.site-header nav a:hover {
+  color: var(--accent);
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.bio {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+.bio-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.portrait {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+  order: 2;
+}
+
+.bio p {
+  margin: 0 0 16px;
+}
+
+@media (max-width: 560px) {
+  .bio {
+    flex-direction: column;
+  }
+  .portrait {
+    order: 0;
+    width: 120px;
+    height: 120px;
+  }
+}
+
+.contact {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 32px 0;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 40px;
+}
+
+h2 {
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  margin: 0 0 16px;
+}
+
+.pub-list,
+.news-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pub-list li {
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+}
+
+.pub-title {
+  font-weight: 600;
+}
+
+.pub-authors,
+.pub-venue {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.news-list li {
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.news-list li strong {
+  color: var(--text);
+}
+
+@media (max-width: 640px) {
+  .columns {
+    grid-template-columns: 1fr;
+  }
+}
