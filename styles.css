@@ -151,8 +151,13 @@ a:hover { color: var(--carnelian); }
 
 .contact-info strong { color: var(--forest); }
 
-.intro-photo {
+.intro-grid picture {
   flex-shrink: 0;
+  display: block;
+}
+
+.intro-photo {
+  display: block;
   width: 280px;
   height: 320px;
   object-fit: cover;

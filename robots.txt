@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://anapimentapereira.com/sitemap.xml
