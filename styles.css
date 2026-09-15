@@ -357,6 +357,7 @@ a:hover { color: var(--carnelian); }
   margin: 0 0 42px;
   max-width: 52ch;
   color: #c2c9c2;
+  text-wrap: pretty;
 }
 
 .contact-grid {
