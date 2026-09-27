@@ -69,6 +69,13 @@ button{font:inherit;color:inherit}
 .pip{width:12px;height:12px;border-radius:50%;border:2px solid var(--ink)}
 .pip.on{background:var(--ink)}
 .total{font-family:var(--f-mono);font-size:14px;font-variant-numeric:tabular-nums}
+.lang{display:inline-flex;border:1.5px solid var(--ink);border-radius:6px;overflow:hidden}
+.lang button{border:0;background:transparent;color:var(--ink);font-family:var(--f-mono);font-size:12px;font-weight:600;letter-spacing:.06em;padding:4px 8px;cursor:pointer}
+.lang button+button{border-left:1.5px solid var(--ink)}
+.lang button:hover{background:var(--surface-2)}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+@media (max-width:620px){.hud .reflink{display:none}}
+@media (max-width:480px){.hud .total{display:none}}
 
 /* buttons */
 .btn{display:inline-flex;align-items:center;gap:8px;border:2px solid var(--ink);background:var(--ink);color:var(--bg);font-family:var(--f-display);font-weight:600;font-size:16px;letter-spacing:.03em;padding:10px 18px;border-radius:8px;cursor:pointer;text-decoration:none}
@@ -281,11 +288,12 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
 <body>
 <header class="topbar">
   <div class="wrap">
-    <button class="brand" id="brand" type="button" aria-label="Bite Club home">Bite Club</button>
+    <button class="brand" id="brand" type="button" aria-label="Bite Club home" data-i18n-aria="brand">Bite Club</button>
     <div class="hud">
-      <a href="#refs" class="eyebrow" style="text-decoration:none">References</a>
+      <a href="#refs" class="eyebrow reflink" style="text-decoration:none" data-i18n="refsLink">References</a>
       <div class="pips" id="pips" aria-label="Rules completed"></div>
       <span class="total" id="total">0 / 400 pts</span>
+      <div class="lang" role="group" aria-label="Language" data-i18n-aria="lang"><button type="button" data-lang="en" lang="en">EN</button><button type="button" data-lang="pt" lang="pt-BR">PT</button><button type="button" data-lang="es" lang="es">ES</button></div>
     </div>
   </div>
   <div class="bands" aria-hidden="true"></div>
@@ -297,18 +305,18 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
   <div class="wrap">
     <div class="hero">
       <div>
-        <p class="eyebrow">A game about mosquito-borne viruses</p>
+        <p class="eyebrow" data-i18n="h.eyebrow">A game about mosquito-borne viruses</p>
         <h1>Bite<br>Club</h1>
-        <p class="rule1">The first rule of Bite Club: <em>don't get bitten.</em></p>
-        <p class="lead">Dengue, Zika, chikungunya, yellow fever and West Nile all travel the same way: from one host to the next inside a mosquito. Learn how the chain works, how to break it, and how doctors figure out who's infected.</p>
+        <p class="rule1" data-i18n="h.rule1">The first rule of Bite Club: <em>don't get bitten.</em></p>
+        <p class="lead" data-i18n="h.lead">Dengue, Zika, chikungunya, yellow fever and West Nile all travel the same way: from one host to the next inside a mosquito. Learn how the chain works, how to break it, and how doctors figure out who's infected.</p>
         <div class="ctas">
-          <button class="btn" type="button" data-go="cycle">Start with Rule 1</button>
-          <a class="btn ghost" href="#guide">Field guide</a>
+          <button class="btn" type="button" data-go="cycle" data-i18n="h.start">Start with Rule 1</button>
+          <a class="btn ghost" href="#guide" data-i18n="h.guideBtn">Field guide</a>
         </div>
       </div>
-      <div class="swat" id="swat" role="img" aria-label="A mosquito flying around. Tap it to swat it and reveal a fact.">
+      <div class="swat" id="swat" data-i18n-aria="swat" role="img" aria-label="A mosquito flying around. Tap it to swat it and reveal a fact.">
         <canvas id="swatCanvas"></canvas>
-        <div class="tag eyebrow">Warm-up · tap the mosquito</div>
+        <div class="tag eyebrow" data-i18n="h.swatTag">Warm-up · tap the mosquito</div>
         <div class="cap"><p class="fact" id="swatFact" aria-live="polite"></p><span class="count" id="swatCount">0 swatted</span></div>
       </div>
     </div>
@@ -316,16 +324,16 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
 
   <div class="wrap section">
     <div class="section-head">
-      <h2>The rules</h2>
+      <h2 data-i18n="rulesTitle">The rules</h2>
       <p class="rank" id="rankLine">Rank: <b>Rookie Inspector</b></p>
     </div>
     <div class="rules" id="rules"></div>
   </div>
 
   <div class="wrap section" id="guide">
-    <div class="section-head"><h2>Field guide</h2><p class="rank">Five viruses, two kinds of mosquito</p></div>
+    <div class="section-head"><h2 data-i18n="guideTitle">Field guide</h2><p class="rank" data-i18n="guideSub">Five viruses, two kinds of mosquito</p></div>
     <div class="tablebox">
-      <table>
+      <table data-i18n="table">
         <thead><tr><th>Virus</th><th>Main mosquito</th><th>Where it spreads</th><th>What it does</th><th>Vaccine?</th></tr></thead>
         <tbody>
           <tr><td class="v">Dengue</td><td><i>Aedes aegypti</i>, <i>Ae. albopictus</i>. Active during the day.<sup class="cite" data-r="who-dengue"></sup></td><td>Tropical and subtropical regions worldwide</td><td>About 1 in 4 infected people get sick.<sup class="cite" data-r="cdc-dengue"></sup> Fever with pain behind the eyes, muscle, joint or bone pain, nausea, rash.<sup class="cite" data-r="cdc-dengue-sx"></sup> A second infection raises the risk of severe dengue.<sup class="cite" data-r="who-dengue"></sup></td><td>One vaccine is licensed in some countries. WHO recommends it only for ages 6–16 in high-transmission areas.<sup class="cite" data-r="who-dengue"></sup></td></tr>
@@ -342,42 +350,42 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
 <!-- RULE 1: CYCLE -->
 <section id="view-cycle" hidden>
   <div class="wrap mission">
-    <button class="back" type="button" data-go="hub">← All rules</button>
+    <button class="back" type="button" data-go="hub" data-i18n="back">← All rules</button>
     <div class="mhead">
-      <p class="eyebrow">Rule 1 of 3 · The transmission cycle</p>
-      <h2>Know the chain</h2>
-      <p>A mosquito doesn't make viruses. It carries them from one infected person to the next. Every link in that chain takes time, and each one is a place where the chain can break.</p>
+      <p class="eyebrow" data-i18n="c.eyebrow">Rule 1 of 3 · The transmission cycle</p>
+      <h2 data-i18n="c.title">Know the chain</h2>
+      <p data-i18n="c.intro">A mosquito doesn't make viruses. It carries them from one infected person to the next. Every link in that chain takes time, and each one is a place where the chain can break.</p>
     </div>
 
     <div class="part">
-      <div class="part-head"><h3>Part A: Put the chain in order</h3><span class="pts" id="cyA-pts">up to <b>50</b> pts</span></div>
-      <p class="sub">Dengue is spreading through a neighborhood. Tap the steps in the order they happen, starting with an infected person. Wrong picks cost points.</p>
+      <div class="part-head"><h3 data-i18n="c.aTitle">Part A: Put the chain in order</h3><span class="pts" id="cyA-pts">up to <b>50</b> pts</span></div>
+      <p class="sub" data-i18n="c.aSub">Dengue is spreading through a neighborhood. Tap the steps in the order they happen, starting with an infected person. Wrong picks cost points.</p>
       <div class="cyc">
         <ol class="slots" id="cy-slots"></ol>
         <div>
           <div class="pool" id="cy-pool"></div>
-          <p class="loopnote" id="cy-loop">After step 6 the chain loops back to step 1.</p>
+          <p class="loopnote" id="cy-loop" data-i18n="c.loop">After step 6 the chain loops back to step 1.</p>
         </div>
       </div>
       <div id="cy-after" hidden>
-        <div class="brackets">
+        <div class="brackets" data-i18n="c.brk">
           <div class="brk"><b>Extrinsic incubation period (steps 3–4)</b>The time inside the mosquito before it can pass the virus on. It often takes about a week, and it gets shorter as temperature rises (see Part C).<sup class="cite" data-r="cdc-wnv-cause"></sup><sup class="cite" data-r="mordecai"></sup></div>
           <div class="brk"><b>Intrinsic incubation period (step 6)</b>The time inside a person before they get sick. For dengue, usually 4 to 10 days.<sup class="cite" data-r="who-dengue"></sup></div>
         </div>
         <p class="src" data-src="who-dengue cdc-dengue-tx cdc-aedes"></p>
-        <div class="row"><button class="btn ghost" type="button" id="cy-reset">Replay Part A</button></div>
+        <div class="row"><button class="btn ghost" type="button" id="cy-reset" data-i18n="c.replay">Replay Part A</button></div>
       </div>
     </div>
 
     <div class="part">
-      <div class="part-head"><h3>Part B: The dead end</h3><span class="pts" id="cyB-pts">up to <b>10</b> pts</span></div>
-      <p class="sub">West Nile virus runs a different loop: <i>Culex</i> mosquitoes pass it between birds. People get bitten by accident.</p>
+      <div class="part-head"><h3 data-i18n="c.bTitle">Part B: The dead end</h3><span class="pts" id="cyB-pts">up to <b>10</b> pts</span></div>
+      <p class="sub" data-i18n="c.bSub">West Nile virus runs a different loop: <i>Culex</i> mosquitoes pass it between birds. People get bitten by accident.</p>
       <div id="cy-wnv"></div>
     </div>
 
     <div class="part">
-      <div class="part-head"><h3>Part C: Temperature lab</h3><span class="pts" id="cyC-pts">up to <b>40</b> pts</span></div>
-      <p class="sub">An infected mosquito is only dangerous if it lives long enough to finish the extrinsic incubation period. Warmth speeds up the virus but also wears out the mosquito. Slide the temperature and find where an infected mosquito is most likely to become infectious. Then lock it in to reveal the full curve.</p>
+      <div class="part-head"><h3 data-i18n="c.cTitle">Part C: Temperature lab</h3><span class="pts" id="cyC-pts">up to <b>40</b> pts</span></div>
+      <p class="sub" data-i18n="c.cSub">An infected mosquito is only dangerous if it lives long enough to finish the extrinsic incubation period. Warmth speeds up the virus but also wears out the mosquito. Slide the temperature and find where an infected mosquito is most likely to become infectious. Then lock it in to reveal the full curve.</p>
       <div class="lab">
         <div class="slider-row">
           <label for="temp">18 °C</label>
@@ -385,15 +393,15 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
           <label for="temp">36 °C</label>
         </div>
         <div class="stats">
-          <div class="stat"><div class="k">Temperature</div><div class="val" id="t-val">22.0 °C</div></div>
-          <div class="stat"><div class="k">Extrinsic incubation period</div><div class="val" id="t-eip">–</div></div>
-          <div class="stat"><div class="k">Average mosquito lifespan</div><div class="val" id="t-life">–</div></div>
+          <div class="stat"><div class="k" data-i18n="c.statTemp">Temperature</div><div class="val" id="t-val">22.0 °C</div></div>
+          <div class="stat"><div class="k" data-i18n="c.statEip">Extrinsic incubation period</div><div class="val" id="t-eip">–</div></div>
+          <div class="stat"><div class="k" data-i18n="c.statLife">Average mosquito lifespan</div><div class="val" id="t-life">–</div></div>
         </div>
-        <div class="stat hot"><div class="k">Chance an infected mosquito lives long enough to become infectious</div><div class="val" id="t-chance">–</div></div>
-        <div class="svgbox"><svg id="t-svg" viewBox="0 0 600 250" role="img" aria-label="Chart of transmission chance by temperature"></svg></div>
-        <div class="row"><button class="btn" type="button" id="t-lock">Lock in this temperature</button></div>
+        <div class="stat hot"><div class="k" data-i18n="c.statChance">Chance an infected mosquito lives long enough to become infectious</div><div class="val" id="t-chance">–</div></div>
+        <div class="svgbox"><svg id="t-svg" data-i18n-aria="tsvg" viewBox="0 0 600 250" role="img" aria-label="Chart of transmission chance by temperature"></svg></div>
+        <div class="row"><button class="btn" type="button" id="t-lock" data-i18n="c.lock">Lock in this temperature</button></div>
         <div id="t-fb"></div>
-        <p class="note">This is a simplified teaching model for dengue in <i>Aedes aegypti</i>. Its shape follows real data: Mordecai et al. (2017) found that dengue, Zika and chikungunya spread between about 18 and 34 °C, with the most transmission between 26 and 29 °C. The exact numbers here are for illustration, not forecasting.</p>
+        <p class="note" data-i18n="c.note">This is a simplified teaching model for dengue in <i>Aedes aegypti</i>. Its shape follows real data: Mordecai et al. (2017) found that dengue, Zika and chikungunya spread between about 18 and 34 °C, with the most transmission between 26 and 29 °C. The exact numbers here are for illustration, not forecasting.</p>
         <p class="src" data-src="mordecai"></p>
       </div>
     </div>
@@ -404,31 +412,31 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
 <!-- RULE 2: PREVENT -->
 <section id="view-prevent" hidden>
   <div class="wrap mission">
-    <button class="back" type="button" data-go="hub">← All rules</button>
+    <button class="back" type="button" data-go="hub" data-i18n="back">← All rules</button>
     <div class="mhead">
-      <p class="eyebrow">Rule 2 of 3 · Prevention</p>
-      <h2>Break it early</h2>
-      <p><i>Aedes</i> females lay their eggs on the inside walls of containers, just above the water line. The eggs become adult mosquitoes in 7 to 10 days.<sup class="cite" data-r="cdc-aedes"></sup> Take away the water and you take away the next generation.</p>
+      <p class="eyebrow" data-i18n="p.eyebrow">Rule 2 of 3 · Prevention</p>
+      <h2 data-i18n="p.title">Break it early</h2>
+      <p data-i18n="p.intro"><i>Aedes</i> females lay their eggs on the inside walls of containers, just above the water line. The eggs become adult mosquitoes in 7 to 10 days.<sup class="cite" data-r="cdc-aedes"></sup> Take away the water and you take away the next generation.</p>
     </div>
 
     <div class="part">
-      <div class="part-head"><h3>Part A: Tip &amp; Toss</h3><span class="pts" id="pvA-pts">up to <b>60</b> pts</span></div>
-      <p class="sub">You have 40 seconds to clear this yard. Tap everything that's holding standing water. Every second a container stays wet, more mosquitoes hatch. Careful: some things are already safe, and tapping them wastes time.</p>
+      <div class="part-head"><h3 data-i18n="p.aTitle">Part A: Tip &amp; Toss</h3><span class="pts" id="pvA-pts">up to <b>60</b> pts</span></div>
+      <p class="sub" data-i18n="p.aSub">You have 40 seconds to clear this yard. Tap everything that's holding standing water. Every second a container stays wet, more mosquitoes hatch. Careful: some things are already safe, and tapping them wastes time.</p>
       <div class="yard-hud">
-        <div class="stat"><div class="k">Time left</div><div class="val" id="yd-time">40.0 s</div></div>
-        <div class="stat hot"><div class="k">Mosquitoes hatched</div><div class="val" id="yd-mosq">0</div></div>
-        <div class="stat"><div class="k">Points</div><div class="val" id="yd-pts">0</div></div>
+        <div class="stat"><div class="k" data-i18n="p.time">Time left</div><div class="val" id="yd-time">40.0 s</div></div>
+        <div class="stat hot"><div class="k" data-i18n="p.hatched">Mosquitoes hatched</div><div class="val" id="yd-mosq">0</div></div>
+        <div class="stat"><div class="k" data-i18n="p.points">Points</div><div class="val" id="yd-pts">0</div></div>
       </div>
       <div class="yard-wrap">
         <div class="yard" id="yard"></div>
-        <div class="yard-cover" id="yd-cover"><div class="box"><p><b>Ready?</b> 8 things in this yard are breeding sites. Find them fast.</p><button class="btn" type="button" id="yd-start">Start the clock</button></div></div>
+        <div class="yard-cover" id="yd-cover"><div class="box"><p data-i18n="p.cover"><b>Ready?</b> 8 things in this yard are breeding sites. Find them fast.</p><button class="btn" type="button" id="yd-start" data-i18n="p.start">Start the clock</button></div></div>
       </div>
       <div id="yd-results"></div>
     </div>
 
     <div class="part">
-      <div class="part-head"><h3>Part B: Pack your protection</h3><span class="pts" id="pvB-pts">up to <b>40</b> pts</span></div>
-      <p class="sub">For each situation, select <b>every</b> option that actually helps, then check your answer. Some popular products don't work.</p>
+      <div class="part-head"><h3 data-i18n="p.bTitle">Part B: Pack your protection</h3><span class="pts" id="pvB-pts">up to <b>40</b> pts</span></div>
+      <p class="sub" data-i18n="p.bSub">For each situation, select <b>every</b> option that actually helps, then check your answer. Some popular products don't work.</p>
       <div id="scen"></div>
     </div>
     <div id="pv-done"></div>
@@ -438,17 +446,17 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
 <!-- RULE 3: DIAGNOSE -->
 <section id="view-diagnose" hidden>
   <div class="wrap mission">
-    <button class="back" type="button" data-go="hub">← All rules</button>
+    <button class="back" type="button" data-go="hub" data-i18n="back">← All rules</button>
     <div class="mhead">
-      <p class="eyebrow">Rule 3 of 3 · Diagnosis</p>
-      <h2>Read the case</h2>
-      <p>These viruses cause similar fevers, so doctors use clues: where the patient has been, what hurts, and how many days they've been sick. The day matters most for testing. Early on you look for the virus itself. Later, you look for the antibodies the body made against it.</p>
+      <p class="eyebrow" data-i18n="d.eyebrow">Rule 3 of 3 · Diagnosis</p>
+      <h2 data-i18n="d.title">Read the case</h2>
+      <p data-i18n="d.intro">These viruses cause similar fevers, so doctors use clues: where the patient has been, what hurts, and how many days they've been sick. The day matters most for testing. Early on you look for the virus itself. Later, you look for the antibodies the body made against it.</p>
     </div>
 
     <div class="part">
-      <div class="part-head"><h3>Lab cheat sheet</h3><span class="pts">Dengue timeline, day 0 = first day of fever</span></div>
-      <div class="svgbox"><svg id="tl-svg" viewBox="0 0 640 220" role="img" aria-label="Timeline showing when each dengue test works"></svg></div>
-      <div class="legend">
+      <div class="part-head"><h3 data-i18n="d.sheet">Lab cheat sheet</h3><span class="pts" data-i18n="d.sheetSub">Dengue timeline, day 0 = first day of fever</span></div>
+      <div class="svgbox"><svg id="tl-svg" data-i18n-aria="tlsvg" viewBox="0 0 640 220" role="img" aria-label="Timeline showing when each dengue test works"></svg></div>
+      <div class="legend" data-i18n="d.legend">
         <span><i style="background:var(--water)"></i>RT-PCR finds the virus's genetic material</span>
         <span><i style="background:var(--water);opacity:.5"></i>NS1 finds a dengue protein</span>
         <span><i style="background:var(--amber-fill)"></i>IgM antibodies (the body's early response)</span>
@@ -462,23 +470,23 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
         <div class="chart" id="dx-chart"></div>
         <div>
           <div id="dx-q"></div>
-          <div class="row"><button class="btn" type="button" id="dx-next" hidden>Next</button></div>
+          <div class="row"><button class="btn" type="button" id="dx-next" hidden data-i18n="d.next">Next</button></div>
         </div>
       </div>
     </div>
     <div id="dx-done"></div>
-    <p class="note">These patients are made up for practice. If you or someone you know has a fever after mosquito bites or travel, see a doctor. This game is not medical advice.</p>
+    <p class="note" data-i18n="d.note">These patients are made up for practice. If you or someone you know has a fever after mosquito bites or travel, see a doctor. This game is not medical advice.</p>
   </div>
 </section>
 
 <!-- FINAL -->
 <section id="view-final" hidden>
   <div class="wrap mission">
-    <button class="back" type="button" data-go="hub">← All rules</button>
+    <button class="back" type="button" data-go="hub" data-i18n="back">← All rules</button>
     <div class="mhead">
-      <p class="eyebrow">Final challenge · 10 questions</p>
-      <h2>Outbreak drill</h2>
-      <p>A mix of everything: the cycle, prevention and diagnosis. Build a streak for bragging rights. Each correct answer is worth 10 points.</p>
+      <p class="eyebrow" data-i18n="f.eyebrow">Final challenge · 10 questions</p>
+      <h2 data-i18n="f.title">Outbreak drill</h2>
+      <p data-i18n="f.intro">A mix of everything: the cycle, prevention and diagnosis. Build a streak for bragging rights. Each correct answer is worth 10 points.</p>
     </div>
     <div class="part" id="fq"></div>
   </div>
@@ -490,14 +498,14 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
     <div class="bands" aria-hidden="true" style="margin-bottom:24px"></div>
     <div class="cols">
       <div>
-        <h3>For teachers</h3>
-        <p>Made for grades 9–12. Plan on 35–45 minutes for all three rules plus the final drill. Students can play in any order. Progress is saved in each student's own browser only. The field guide table works as a handout for discussion.</p>
-        <p style="margin-top:10px">Every answer in the game shows the source it comes from. Small numbers link to the full reference list. Sources were checked in September 2026.</p>
+        <h3 data-i18n="ft.teachers">For teachers</h3>
+        <p data-i18n="ft.p1">Made for grades 9–12. Plan on 35–45 minutes for all three rules plus the final drill. Students can play in any order. Progress is saved in each student's own browser only. The field guide table works as a handout for discussion.</p>
+        <p style="margin-top:10px" data-i18n="ft.p2">Every answer in the game shows the source it comes from. Small numbers link to the full reference list. Sources were checked in September 2026.</p>
         <div class="row"><button class="btn ghost" type="button" id="reset">Reset my progress</button></div>
-        <p style="margin-top:18px">Created by <a href="/">Ana Alice Pimenta Pereira</a>, Cornell University.</p>
+        <p style="margin-top:18px" data-i18n="ft.credit">Created by <a href="/">Ana Alice Pimenta Pereira</a>, Cornell University.</p>
       </div>
       <div id="refs">
-        <h3>References</h3>
+        <h3 data-i18n="refsTitle">References</h3>
         <ol class="refs" id="refList"></ol>
       </div>
     </div>
@@ -505,6 +513,8 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
 </footer>
 <div id="toast" role="status" aria-live="polite"></div>
 
+<script src="lang-pt.js"></script>
+<script src="lang-es.js"></script>
 <script>
 (function(){
 "use strict";
@@ -513,6 +523,83 @@ const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls)
 const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const reduced = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- language ---------- */
+const I18N = window.BC_I18N || {};
+const LANGS = ['en', 'pt', 'es'];
+const LANG = (function(){
+  let q = null;
+  try { q = new URLSearchParams(location.search).get('lang'); } catch(e) {}
+  if (LANGS.includes(q)) { try { localStorage.setItem('biteclub-lang', q); } catch(e) {} return q; }
+  try { const s = localStorage.getItem('biteclub-lang'); if (LANGS.includes(s)) return s; } catch(e) {}
+  const n = String(navigator.language || 'en').slice(0, 2).toLowerCase();
+  return LANGS.includes(n) ? n : 'en';
+})();
+const TR = (LANG !== 'en' && I18N[LANG]) || {};
+const LOCALE = { en:'en-US', pt:'pt-BR', es:'es' }[LANG];
+const EN_UI = {
+  src1:'Source: ', srcN:'Sources: ', correct:'Correct.', notQuite:'Not quite.',
+  swatted:'{n} swatted', pipsLabel:'{n} of 4 completed', totalPts:'{n} / 400 pts', rankLine:'Rank: <b>{rank}</b> · {n} / 400',
+  rank1:'Rookie Inspector', rank2:'Field Tech', rank3:'Vector Control Officer', rank4:'Chain Breaker',
+  best:'Best {n} / 100', notPlayed:'Not played', step:'Step {n}',
+  perfectChain:'Perfect chain. No mistakes.', chainDone1:'Chain complete with 1 wrong pick.', chainDoneN:'Chain complete with {n} wrong picks.',
+  hint:'Hint: {h}', upTo:'up to <b>{n}</b> pts', ptsOf:'<b>{n}</b> / {max} pts',
+  tempAxis:'Temperature (°C)', lockReveal:'Lock in a temperature to reveal the full curve', peakReal:'peak in real data [{n}]', days:'{n} days',
+  tempFb:'<strong>You picked {t} °C.</strong> In this model risk peaks around 28 °C. Real-world data put the peak between 26 and 29 °C, and show almost no transmission below about 18 °C or above 34 °C. When it’s cool, the virus takes weeks to reach the saliva and most mosquitoes die first. When it’s very hot, the virus is fast but mosquitoes die within days. That’s why temperature shapes where and when these viruses spread.',
+  ruleComplete:'Rule complete', pointsOf:'{n} / 100 points', nextRule:'Next: {label} →',
+  rule2label:'Rule 2: Break it early', rule3label:'Rule 3: Read the case', finalLabel:'Outbreak drill',
+  tipped:'Tipped', safe:'Safe', missed:'Missed', yardCleared:'Yard cleared.', timesUp:'Time’s up.',
+  yardSummary:'You emptied {c} of 8 breeding sites', yardBonus:' with {b} bonus points for time left', yardHatched:'. About {m} mosquitoes hatched while you worked. ',
+  yardMore:'<br><br><strong>One more step:</strong> <i>Aedes</i> eggs stick to container walls just above the water line and can survive drying out for up to 8 months. Tipping out water isn’t enough. The CDC says to empty and scrub, turn over, cover, or throw out anything that holds water once a week.',
+  playAgainYard:'Play Tip &amp; Toss again',
+  situation:'Situation {i} of {n}', selectAll:'select all that help', check:'Check',
+  scenPts:'<b>+{p}</b> of 8 · dashed green = a good option you missed', nextSituation:'Next situation', finish:'Finish',
+  scenDone:'<strong>Protection packed: {g} / 40.</strong> The pattern: proven repellents, covering up, screens and nets, vaccines where they exist, and removing water. Wristbands and citronella candles don’t work.',
+  replayScen:'Replay situations',
+  caseFile:'Case file {i} of {n}', dxCorrect:'<b>{r}</b> of {n} correct', seeResults:'See my results', nextCase:'Next case file', nextQ:'Next question',
+  casesClosed:'Case files closed',
+  casesSummary:'You got {r} of {n} right. Key ideas: in the first week, test for the virus (RT-PCR, NS1). After that, test for antibodies (IgM), and remember that related viruses can cross-react. With dengue, warning signs usually start 24 to 48 hours after the fever goes away.',
+  reviewCases:'Review the cases again',
+  tlWarn:'warning signs often start', tlFever:'Fever', tlPcr:'RT-PCR (virus)', tlNs1:'NS1 (dengue protein)', tlIgm:'IgM antibodies',
+  tlLasts:'lasts ~3 months →', tlDay:'Day of illness', tlToday:'today: day {d}',
+  question:'Question {i} of {n}', streak:'Streak {n}', inARow:'{n} in a row!', seeScore:'See my score', drillComplete:'Drill complete',
+  finalSummary:'Longest streak: {b}. Your total across all rules is <b>{t} / 400</b>, which earns the rank <b>{rank}</b>.',
+  skipped:' Play the rules you skipped to raise it.', playDrillAgain:'Play the drill again', backAll:'Back to all rules',
+  resetBtn:'Reset my progress', resetConfirm:'Click again to erase all scores', resetDone:'Progress reset.'
+};
+window.__t = function(key, vars){ return t(key, vars); };
+function t(key, vars){
+  let s = (TR.ui && TR.ui[key] != null) ? TR.ui[key] : EN_UI[key];
+  if (s == null) return key;
+  if (vars) s = s.replace(/\{(\w+)\}/g, (m, k) => vars[k] != null ? vars[k] : m);
+  return s;
+}
+const fmt = (n, d) => { try { return Number(n).toLocaleString(LOCALE, { minimumFractionDigits:d, maximumFractionDigits:d }); } catch(e) { return Number(n).toFixed(d); } };
+// Lay translated text over the English data, keeping answers, sources and structure from the English version.
+function merge(base, over){
+  if (over == null) return base;
+  if (Array.isArray(base)) return base.map((b, i) => merge(b, Array.isArray(over) ? over[i] : undefined));
+  if (base && typeof base === 'object') {
+    if (typeof over === 'string') return Object.assign({}, base, { t:over });
+    const o = Object.assign({}, base);
+    Object.keys(over).forEach(k => { o[k] = merge(base[k], over[k]); });
+    return o;
+  }
+  return over;
+}
+(function applyLanguage(){
+  document.documentElement.lang = LANG === 'pt' ? 'pt-BR' : LANG;
+  if (TR.html) document.querySelectorAll('[data-i18n]').forEach(e => { const v = TR.html[e.dataset.i18n]; if (v != null) e.innerHTML = v; });
+  if (TR.aria) document.querySelectorAll('[data-i18n-aria]').forEach(e => { const v = TR.aria[e.dataset.i18nAria]; if (v != null) e.setAttribute('aria-label', v); });
+  document.querySelectorAll('.lang button').forEach(b => {
+    b.setAttribute('aria-pressed', String(b.dataset.lang === LANG));
+    b.addEventListener('click', () => {
+      if (b.dataset.lang === LANG) return;
+      try { localStorage.setItem('biteclub-lang', b.dataset.lang); } catch(e) {}
+      const u = new URL(location.href); u.searchParams.set('lang', b.dataset.lang); location.replace(u.href);
+    });
+  });
+})();
 
 /* ---------- references ---------- */
 const REF_LIST = [
@@ -542,12 +629,12 @@ const REF_LIST = [
   ['rodriguez', 'Rodriguez et al. 2017', 'Rodriguez SD, Chung HN, Gonzales KK, et al. Efficacy of some wearable devices compared with spray-on insect repellents for the yellow fever mosquito, Aedes aegypti. J Insect Sci. 2017;17(1):24.', 'https://doi.org/10.1093/jisesa/iew117']
 ];
 const REFS = {};
-REF_LIST.forEach((r, i) => { REFS[r[0]] = { n:i + 1, label:r[1], full:r[2], url:r[3] }; });
+REF_LIST.forEach((r, i) => { REFS[r[0]] = { n:i + 1, label:(TR.refs && TR.refs[r[0]]) || r[1], full:r[2], url:r[3] }; });
 const refLink = k => { const r = REFS[k]; return r ? '<a href="' + r.url + '" target="_blank" rel="noopener"><span class="rn">[' + r.n + ']</span> ' + r.label + '</a>' : ''; };
 function src(keys){
   if (!keys) return '';
   const ks = (Array.isArray(keys) ? keys : keys.split(/\s+/)).filter(k => REFS[k]);
-  return ks.length ? '<span class="src">' + (ks.length > 1 ? 'Sources: ' : 'Source: ') + ks.map(refLink).join(' · ') + '</span>' : '';
+  return ks.length ? '<span class="src">' + (ks.length > 1 ? t('srcN') : t('src1')) + ks.map(refLink).join(' · ') + '</span>' : '';
 }
 function renderRefs(){
   $('#refList').innerHTML = REF_LIST.map(r => '<li id="ref-' + REFS[r[0]].n + '">' + r[2] + ' <a href="' + r[3] + '" target="_blank" rel="noopener">' + r[3].replace(/^https:\/\//, '') + '</a></li>').join('');
@@ -571,10 +658,10 @@ function record(m, pts){
 }
 const total = () => MISSIONS.reduce((a, m) => a + S.scores[m], 0);
 function rankName(t){
-  if (t >= 340) return 'Chain Breaker';
-  if (t >= 250) return 'Vector Control Officer';
-  if (t >= 150) return 'Field Tech';
-  return 'Rookie Inspector';
+  if (t >= 340) return window.__t('rank4');
+  if (t >= 250) return window.__t('rank3');
+  if (t >= 150) return window.__t('rank2');
+  return window.__t('rank1');
 }
 
 let toastT;
@@ -586,22 +673,22 @@ function toast(msg){
 function renderHud(){
   const pips = $('#pips'); pips.innerHTML = '';
   MISSIONS.forEach(m => { const p = el('span', 'pip' + (S.done[m] ? ' on' : '')); p.title = m; pips.append(p); });
-  pips.setAttribute('aria-label', MISSIONS.filter(m => S.done[m]).length + ' of 4 completed');
-  $('#total').textContent = total() + ' / 400 pts';
-  $('#rankLine').innerHTML = 'Rank: <b>' + rankName(total()) + '</b> · ' + total() + ' / 400';
+  pips.setAttribute('aria-label', t('pipsLabel', {n:MISSIONS.filter(m => S.done[m]).length}));
+  $('#total').textContent = t('totalPts', {n:total()});
+  $('#rankLine').innerHTML = t('rankLine', {rank:rankName(total()), n:total()});
 }
 
-const RULE_CARDS = [
+const RULE_CARDS = merge([
   {m:'cycle', n:'1', t:'Know the chain', d:'Put the transmission cycle in order, then find the temperature where mosquitoes are most dangerous.'},
   {m:'prevent', n:'2', t:'Break it early', d:'Clear a yard of breeding sites against the clock, then pick the protection that actually works.'},
   {m:'diagnose', n:'3', t:'Read the case', d:'Six patients, six fevers. Pick the likely virus, the right test for the day, and what happens next.'},
   {m:'final', n:'', t:'Outbreak drill', d:'Ten quick questions across everything. Best played after the three rules.'}
-];
+], TR.rules);
 function renderRules(){
   const host = $('#rules'); host.innerHTML = '';
   RULE_CARDS.forEach(r => {
     const b = el('button', 'rule' + (r.n ? '' : ' no-num')); b.type = 'button'; b.dataset.go = r.m;
-    const st = S.done[r.m] ? '<span class="chip done">Best ' + S.scores[r.m] + ' / 100</span>' : '<span class="chip">Not played</span>';
+    const st = S.done[r.m] ? '<span class="chip done">' + t('best', {n:S.scores[r.m]}) + '</span>' : '<span class="chip">' + t('notPlayed') + '</span>';
     b.innerHTML = (r.n ? '<span class="num">' + r.n + '</span>' : '') + '<h3>' + r.t + '</h3><p>' + r.d + '</p><div class="status">' + st + '</div>';
     host.append(b);
   });
@@ -638,7 +725,7 @@ function mcq(host, q, done){
       b.classList.add(o.ok ? 'correct' : 'wrong');
       if (!o.ok) btns[opts.findIndex(x => x.ok)].classList.add('correct');
       fb.className = 'fb ' + (o.ok ? 'fb-good' : 'fb-bad');
-      fb.innerHTML = '<strong>' + (o.ok ? 'Correct.' : 'Not quite.') + '</strong> ' + (o.why ? o.why + ' ' : '') + (q.explain || '') + src(q.src);
+      fb.innerHTML = '<strong>' + (o.ok ? t('correct') : t('notQuite')) + '</strong> ' + (o.why ? o.why + ' ' : '') + (q.explain || '') + src(q.src);
       fb.hidden = false;
       done(!!o.ok);
     });
@@ -648,7 +735,7 @@ function mcq(host, q, done){
 }
 
 /* ---------- hero: swat the mosquito ---------- */
-const FACTS = [
+const FACTS_EN = [
   ['Only female Aedes mosquitoes bite. They need blood to make eggs.', 'cdc-aedes'],
   ['The mosquitoes that spread dengue are active during the day.', 'who-dengue'],
   ['Aedes eggs can survive drying out for up to 8 months.', 'cdc-aedes'],
@@ -660,12 +747,13 @@ const FACTS = [
   ['Only about 1 in 4 people infected with dengue get sick.', 'cdc-dengue'],
   ['In a lab test, a citronella candle had no effect on mosquitoes.', 'rodriguez']
 ];
+const FACTS = FACTS_EN.map((f, i) => [(TR.facts && TR.facts[i]) || f[0], f[1]]);
 (function initSwat(){
   const box = $('#swat'), cv = $('#swatCanvas'), ctx = cv.getContext('2d');
   let W = 0, H = 0, dpr = 1, colors = {};
   const m = { x:120, y:120, vx:1.2, vy:0.4, tx:200, ty:150, dead:0, sx:0, sy:0 };
   let factIdx = Math.floor(Math.random() * FACTS.length), frame = 0;
-  $('#swatCount').textContent = S.swats + ' swatted';
+  $('#swatCount').textContent = t('swatted', {n:S.swats});
   function readColors(){
     const cs = getComputedStyle(document.documentElement);
     colors = { ink: cs.getPropertyValue('--ink').trim(), band: cs.getPropertyValue('--band').trim(), wing: cs.getPropertyValue('--wing').trim(), bite: cs.getPropertyValue('--bite').trim(), water: cs.getPropertyValue('--water-soft').trim() };
@@ -745,7 +833,7 @@ const FACTS = [
     if (Math.hypot(x - m.x, y - m.y) < 38) {
       m.dead = performance.now(); m.sx = m.x; m.sy = m.y;
       S.swats++; save();
-      $('#swatCount').textContent = S.swats + ' swatted';
+      $('#swatCount').textContent = t('swatted', {n:S.swats});
       const f = FACTS[factIdx++ % FACTS.length];
       $('#swatFact').innerHTML = f[0] + src(f[1]);
     }
@@ -755,18 +843,18 @@ const FACTS = [
 })();
 
 /* ---------- RULE 1: cycle ---------- */
-const CYCLE = [
+const CYCLE = merge([
   {tag:'Infected person', t:'A person infected with dengue has lots of virus in their blood.', hint:'Start with where the virus is before any mosquito shows up.'},
   {tag:'Blood meal', t:'A female Aedes mosquito bites them and swallows blood carrying the virus.', hint:'How does the virus get from the person into a mosquito?'},
   {tag:'Gut infection', t:'The virus infects the cells lining the mosquito’s gut.', hint:'The blood goes to the mosquito’s stomach first. What happens there?'},
   {tag:'Spread to saliva', t:'The virus escapes the gut and travels to the salivary glands.', hint:'The virus is stuck in the gut. Where does it need to go to get out again?'},
   {tag:'Transmission', t:'The mosquito bites someone new and injects virus with its saliva.', hint:'The mosquito is now infectious. What does it do next?'},
   {tag:'New case', t:'About 4 to 10 days later, the new person gets sick with virus in their blood.', hint:'What happens to the person who was just bitten?'}
-];
+], TR.cycle);
 let cy = { a:null, b:null, c:null };
 function initCycle(){
   buildOrder();
-  mcq($('#cy-wnv'), {
+  mcq($('#cy-wnv'), merge({
     q:'A grandfather catches West Nile from a mosquito bite. Later, a different Culex mosquito bites him. Can that mosquito pick up the virus and spread it to his family?',
     opts:[
       {t:'No. People never get enough virus in their blood to infect a mosquito.', ok:true, why:'People are “dead-end hosts” for West Nile. Unlike birds, they don’t develop high enough levels of virus in their blood, so birds are what keep the cycle going.'},
@@ -774,16 +862,16 @@ function initCycle(){
       {t:'Only if the mosquito bites him within an hour.', why:'Timing isn’t the issue. Humans never get enough West Nile virus in their blood to infect a mosquito.'},
       {t:'Yes, but only from his saliva.', why:'Mosquitoes pick up viruses from blood, not saliva, and people are dead-end hosts for West Nile.'}
     ], src:'cdc-wnv-cause'
-  }, ok => { cy.b = ok ? 10 : 0; $('#cyB-pts').innerHTML = '<b>' + cy.b + '</b> / 10 pts'; checkCycleDone(); });
+  }, TR.wnv), ok => { cy.b = ok ? 10 : 0; $('#cyB-pts').innerHTML = t('ptsOf', {n:cy.b, max:10}); checkCycleDone(); });
   initTempLab();
 }
 function buildOrder(){
   const slots = $('#cy-slots'), pool = $('#cy-pool');
   slots.innerHTML = ''; pool.innerHTML = ''; $('#cy-after').hidden = true; $('#cy-loop').hidden = false;
   let placed = 0, wrong = 0;
-  $('#cyA-pts').innerHTML = 'up to <b>50</b> pts';
+  $('#cyA-pts').innerHTML = t('upTo', {n:50});
   CYCLE.forEach((s, i) => {
-    const li = el('li', 'slot' + (i === 0 ? ' next' : ''), '<span class="n">' + (i + 1) + '</span><span class="txt" style="color:var(--muted)">Step ' + (i + 1) + '</span>');
+    const li = el('li', 'slot' + (i === 0 ? ' next' : ''), '<span class="n">' + (i + 1) + '</span><span class="txt" style="color:var(--muted)">' + t('step', {n:i + 1}) + '</span>');
     slots.append(li);
   });
   shuffle(CYCLE.map((s, i) => i)).forEach(i => {
@@ -797,15 +885,15 @@ function buildOrder(){
         if (placed < CYCLE.length) slots.children[placed].classList.add('next');
         else {
           cy.a = Math.max(15, 50 - wrong * 6);
-          $('#cyA-pts').innerHTML = '<b>' + cy.a + '</b> / 50 pts';
+          $('#cyA-pts').innerHTML = t('ptsOf', {n:cy.a, max:50});
           $('#cy-after').hidden = false; $('#cy-loop').hidden = true;
-          toast(wrong === 0 ? 'Perfect chain. No mistakes.' : 'Chain complete with ' + wrong + ' wrong pick' + (wrong > 1 ? 's' : '') + '.');
+          toast(wrong === 0 ? t('perfectChain') : wrong === 1 ? t('chainDone1') : t('chainDoneN', {n:wrong}));
           checkCycleDone();
         }
       } else {
         wrong++;
         b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake');
-        toast('Hint: ' + CYCLE[placed].hint);
+        toast(t('hint', {h:CYCLE[placed].hint}));
       }
     });
     pool.append(b);
@@ -824,16 +912,16 @@ function initTempLab(){
     let g = '';
     for (let p = 0; p <= 0.5001; p += 0.1) g += '<line class="grid" x1="56" x2="576" y1="' + Y(p) + '" y2="' + Y(p) + '"/><text class="ax" x="48" y="' + (Y(p) + 4) + '" text-anchor="end">' + Math.round(p * 100) + '%</text>';
     for (let t = 18; t <= 36; t += 2) g += '<text class="ax" x="' + X(t) + '" y="230" text-anchor="middle">' + t + '°</text>';
-    g += '<text class="axl" x="316" y="248" text-anchor="middle">Temperature (°C)</text>';
+    g += '<text class="axl" x="316" y="248" text-anchor="middle">' + window.__t('tempAxis') + '</text>';
     if (locked) {
       let pts = [];
       for (let t = 18; t <= 36.001; t += 0.25) pts.push(X(t).toFixed(1) + ',' + Y(chance(t)).toFixed(1));
       g += '<polygon points="' + X(18) + ',' + Y(0) + ' ' + pts.join(' ') + ' ' + X(36) + ',' + Y(0) + '" style="fill:var(--water-soft)"/>';
       g += '<polyline points="' + pts.join(' ') + '" style="fill:none;stroke:var(--water);stroke-width:2.5"/>';
       g += '<rect x="' + X(26) + '" y="22" width="' + (X(29) - X(26)) + '" height="188" style="fill:var(--good);opacity:.12"/>';
-      g += '<text class="ax" x="' + X(27.5) + '" y="16" text-anchor="middle">peak in real data [' + REFS.mordecai.n + ']</text>';
+      g += '<text class="ax" x="' + X(27.5) + '" y="16" text-anchor="middle">' + window.__t('peakReal', {n:REFS.mordecai.n}) + '</text>';
     } else {
-      g += '<text class="axl" x="316" y="110" text-anchor="middle">Lock in a temperature to reveal the full curve</text>';
+      g += '<text class="axl" x="316" y="110" text-anchor="middle">' + window.__t('lockReveal') + '</text>';
     }
     const c = chance(T);
     g += '<line x1="' + X(T) + '" x2="' + X(T) + '" y1="22" y2="210" style="stroke:var(--ink);stroke-width:1.5;stroke-dasharray:4 4"/>';
@@ -842,10 +930,10 @@ function initTempLab(){
   }
   function update(){
     const T = parseFloat(inp.value);
-    $('#t-val').textContent = T.toFixed(1) + ' °C';
-    $('#t-eip').textContent = eip(T).toFixed(1) + ' days';
-    $('#t-life').textContent = (1 / (1 - surv(T))).toFixed(1) + ' days';
-    $('#t-chance').textContent = (chance(T) * 100).toFixed(1) + '%';
+    $('#t-val').textContent = fmt(T, 1) + ' °C';
+    $('#t-eip').textContent = t('days', {n:fmt(eip(T), 1)});
+    $('#t-life').textContent = t('days', {n:fmt(1 / (1 - surv(T)), 1)});
+    $('#t-chance').textContent = fmt(chance(T) * 100, 1) + '%';
     draw(T);
   }
   inp.addEventListener('input', update);
@@ -854,13 +942,11 @@ function initTempLab(){
     locked = true; inp.disabled = false;
     const T = parseFloat(inp.value);
     cy.c = (T >= 26 && T <= 30) ? 40 : (T >= 24.5 && T <= 31.5) ? 25 : 10;
-    $('#cyC-pts').innerHTML = '<b>' + cy.c + '</b> / 40 pts';
+    $('#cyC-pts').innerHTML = t('ptsOf', {n:cy.c, max:40});
     $('#t-lock').disabled = true;
     const fb = $('#t-fb');
     fb.className = 'fb ' + (cy.c === 40 ? 'fb-good' : cy.c === 25 ? 'fb-info' : 'fb-bad');
-    fb.innerHTML = '<strong>You picked ' + T.toFixed(1) + ' °C.</strong> In this model risk peaks around 28 °C. Real-world data put the peak between 26 and 29 °C, and show almost no transmission below about 18 °C or above 34 °C. ' +
-      'When it’s cool, the virus takes weeks to reach the saliva and most mosquitoes die first. When it’s very hot, the virus is fast but mosquitoes die within days. ' +
-      'That’s why temperature shapes where and when these viruses spread.' + src('mordecai');
+    fb.innerHTML = t('tempFb', {t:fmt(T, 1)}) + src('mordecai');
     update(); checkCycleDone();
   });
   update();
@@ -869,12 +955,12 @@ function checkCycleDone(){
   if (cy.a == null || cy.b == null || cy.c == null) return;
   const pts = cy.a + cy.b + cy.c;
   record('cycle', pts);
-  doneBanner('#cy-done', pts, 'prevent', 'Rule 2: Break it early');
+  doneBanner('#cy-done', pts, 'prevent', t('rule2label'));
 }
 function doneBanner(sel, pts, next, nextLabel){
   const host = $(sel); host.innerHTML = '';
-  const d = el('div', 'done-banner', '<div><p class="eyebrow" style="color:inherit;opacity:.75">Rule complete</p><h3>' + pts + ' / 100 points</h3></div>');
-  const b = el('button', 'btn', 'Next: ' + nextLabel + ' →'); b.type = 'button'; b.dataset.go = next;
+  const d = el('div', 'done-banner', '<div><p class="eyebrow" style="color:inherit;opacity:.75">' + t('ruleComplete') + '</p><h3>' + t('pointsOf', {n:pts}) + '</h3></div>');
+  const b = el('button', 'btn', t('nextRule', {label:nextLabel})); b.type = 'button'; b.dataset.go = next;
   d.append(b); host.append(d);
 }
 
@@ -906,7 +992,7 @@ const YARD = [
   {id:'barrel', name:'Rain barrel with a tight lid', wet:false, lesson:'Safe. A tightly covered barrel keeps mosquitoes from getting in to lay eggs.'},
   {id:'trash', name:'Trash can with a tight lid', wet:false, lesson:'Safe. Covered containers can’t collect rainwater.'},
   {id:'pot', name:'Potted plant with drain hole, no saucer', wet:false, lesson:'Safe. Water drains right through.'}
-];
+].map(it => Object.assign({}, it, TR.yard && TR.yard[it.id]));
 let pv = { a:null, b:null };
 function initPrevent(){ renderYard(false); initScenarios(); }
 function renderYard(active){
@@ -928,7 +1014,7 @@ $('#yd-start').addEventListener('click', () => {
     const now = performance.now(), dt = (now - yard.last) / 1000; yard.last = now;
     yard.t = Math.max(0, yard.t - dt);
     yard.mosq += yard.left * dt * (4 + Math.random() * 4);
-    $('#yd-time').textContent = yard.t.toFixed(1) + ' s';
+    $('#yd-time').textContent = fmt(yard.t, 1) + ' s';
     $('#yd-mosq').textContent = Math.floor(yard.mosq);
     if (yard.t <= 0) endYard();
   };
@@ -941,13 +1027,13 @@ $('#yard').addEventListener('click', e => {
   if (it.wet) {
     if (yard.tipped.has(it.id)) return;
     yard.tipped.add(it.id); yard.left--; yard.pts += 5;
-    b.classList.add('tipped'); b.disabled = true; b.querySelector('.flag').innerHTML = '<span class="chip done">Tipped</span>';
+    b.classList.add('tipped'); b.disabled = true; b.querySelector('.flag').innerHTML = '<span class="chip done">' + t('tipped') + '</span>';
     if (yard.left === 0) endYard();
   } else {
     if (!yard.wrong.includes(it.id)) yard.wrong.push(it.id);
     yard.pts -= 3; yard.t = Math.max(0, yard.t - 2);
     b.classList.add('oops'); b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake');
-    b.querySelector('.flag').innerHTML = '<span class="chip">Safe</span>';
+    b.querySelector('.flag').innerHTML = '<span class="chip">' + t('safe') + '</span>';
     toast(it.lesson + ' (−2 s)');
   }
   $('#yd-pts').textContent = Math.max(0, yard.pts);
@@ -959,28 +1045,27 @@ function endYard(){
   const bonus = yard.left === 0 ? Math.min(20, Math.round(yard.t)) : 0;
   const score = clamp(yard.pts + bonus, 0, 60);
   pv.a = Math.max(pv.a || 0, score);
-  $('#pvA-pts').innerHTML = '<b>' + pv.a + '</b> / 60 pts';
+  $('#pvA-pts').innerHTML = t('ptsOf', {n:pv.a, max:60});
   $('#yd-pts').textContent = score;
   const host = $('#yd-results'); host.innerHTML = '';
   const cleared = YARD.filter(y => y.wet).length - yard.left;
   const sum = el('div', 'fb ' + (yard.left === 0 ? 'fb-good' : 'fb-bad'),
-    '<strong>' + (yard.left === 0 ? 'Yard cleared.' : 'Time’s up.') + '</strong> You emptied ' + cleared + ' of 8 breeding sites' +
-    (bonus ? ' with ' + bonus + ' bonus points for time left' : '') + '. About ' + Math.floor(yard.mosq) + ' mosquitoes hatched while you worked. ' +
-    '<br><br><strong>One more step:</strong> <i>Aedes</i> eggs stick to container walls just above the water line and can survive drying out for up to 8 months. Tipping out water isn’t enough. The CDC says to empty and scrub, turn over, cover, or throw out anything that holds water once a week.' + src('cdc-home cdc-aedes'));
+    '<strong>' + (yard.left === 0 ? t('yardCleared') : t('timesUp')) + '</strong> ' + t('yardSummary', {c:cleared}) +
+    (bonus ? t('yardBonus', {b:bonus}) : '') + t('yardHatched', {m:Math.floor(yard.mosq)}) + t('yardMore') + src('cdc-home cdc-aedes'));
   host.append(sum);
   const list = el('div', 'results');
   YARD.forEach(it => {
-    const state = it.wet ? (yard.tipped.has(it.id) ? '<span class="chip done">Tipped</span>' : '<span class="chip" style="color:var(--bite);border-color:var(--bite)">Missed</span>') : '<span class="chip">Safe</span>';
+    const state = it.wet ? (yard.tipped.has(it.id) ? '<span class="chip done">' + t('tipped') + '</span>' : '<span class="chip" style="color:var(--bite);border-color:var(--bite)">' + t('missed') + '</span>') : '<span class="chip">' + t('safe') + '</span>';
     list.append(el('div', 'res', state + '<span><b>' + it.name + '.</b> ' + it.lesson + '</span>'));
   });
   host.append(list);
-  const row = el('div', 'row'); const again = el('button', 'btn ghost', 'Play Tip &amp; Toss again'); again.type = 'button';
-  again.addEventListener('click', () => { $('#yd-results').innerHTML = ''; $('#yd-time').textContent = '40.0 s'; $('#yd-mosq').textContent = '0'; $('#yd-pts').textContent = '0'; $('#yd-cover').hidden = false; renderYard(false); });
+  const row = el('div', 'row'); const again = el('button', 'btn ghost', t('playAgainYard')); again.type = 'button';
+  again.addEventListener('click', () => { $('#yd-results').innerHTML = ''; $('#yd-time').textContent = fmt(40, 1) + ' s'; $('#yd-mosq').textContent = '0'; $('#yd-pts').textContent = '0'; $('#yd-cover').hidden = false; renderYard(false); });
   row.append(again); host.append(row);
   checkPreventDone();
 }
 
-const SCEN = [
+const SCEN = merge([
   {s:'Afternoon soccer practice in a city with a dengue outbreak.', src:'cdc-bites who-dengue rodriguez', opts:[
     {t:'Repellent registered with the EPA, such as DEET, picaridin, IR3535 or oil of lemon eucalyptus', ok:true, why:'These ingredients are proven to work when used as directed.'},
     {t:'A repellent wristband', ok:false, why:'In a lab test, most wearable repellent devices did not reduce how many mosquitoes were attracted to a person.'},
@@ -1011,13 +1096,13 @@ const SCEN = [
     {t:'A partner who travels should use condoms', ok:true, why:'Zika can also spread through sex, and condoms lower the chance.'},
     {t:'Get the Zika vaccine before going', ok:false, why:'There is no Zika vaccine yet.'}
   ]}
-];
+], TR.scen);
 function initScenarios(){
   let i = 0, got = 0;
   const host = $('#scen');
   function show(){
     const sc = SCEN[i]; host.innerHTML = '';
-    host.append(el('div', 'scen-top', '<span class="eyebrow">Situation ' + (i + 1) + ' of ' + SCEN.length + '</span><span class="pts">select all that help</span>'));
+    host.append(el('div', 'scen-top', '<span class="eyebrow">' + t('situation', {i:i + 1, n:SCEN.length}) + '</span><span class="pts">' + t('selectAll') + '</span>'));
     host.append(el('p', 'scen-title', sc.s));
     const list = el('div', 'opts'); const sel = new Set();
     const btns = sc.opts.map((o, k) => {
@@ -1027,7 +1112,7 @@ function initScenarios(){
       list.append(b); return b;
     });
     host.append(list);
-    const row = el('div', 'row'); const chk = el('button', 'btn', 'Check'); chk.type = 'button'; row.append(chk); host.append(row);
+    const row = el('div', 'row'); const chk = el('button', 'btn', t('check')); chk.type = 'button'; row.append(chk); host.append(row);
     chk.addEventListener('click', () => {
       let right = 0;
       sc.opts.forEach((o, k) => {
@@ -1041,16 +1126,16 @@ function initScenarios(){
       });
       const pts = Math.round(8 * right / sc.opts.length); got += pts;
       row.innerHTML = '';
-      row.append(el('span', 'pts', '<b>+' + pts + '</b> of 8 · dashed green = a good option you missed'));
+      row.append(el('span', 'pts', t('scenPts', {p:pts})));
       host.insertAdjacentHTML('beforeend', src(sc.src));
-      const nx = el('button', 'btn', i < SCEN.length - 1 ? 'Next situation' : 'Finish'); nx.type = 'button';
+      const nx = el('button', 'btn', i < SCEN.length - 1 ? t('nextSituation') : t('finish')); nx.type = 'button';
       nx.addEventListener('click', () => {
         if (i < SCEN.length - 1) { i++; show(); }
         else {
-          pv.b = got; $('#pvB-pts').innerHTML = '<b>' + got + '</b> / 40 pts';
+          pv.b = got; $('#pvB-pts').innerHTML = t('ptsOf', {n:got, max:40});
           host.innerHTML = '';
-          host.append(el('div', 'fb fb-info', '<strong>Protection packed: ' + got + ' / 40.</strong> The pattern: proven repellents, covering up, screens and nets, vaccines where they exist, and removing water. Wristbands and citronella candles don’t work.' + src('cdc-bites cdc-home rodriguez')));
-          const r = el('div', 'row'); const again = el('button', 'btn ghost', 'Replay situations'); again.type = 'button';
+          host.append(el('div', 'fb fb-info', t('scenDone', {g:got}) + src('cdc-bites cdc-home rodriguez')));
+          const r = el('div', 'row'); const again = el('button', 'btn ghost', t('replayScen')); again.type = 'button';
           again.addEventListener('click', () => { i = 0; got = 0; show(); }); r.append(again); host.append(r);
           checkPreventDone();
         }
@@ -1063,11 +1148,11 @@ function initScenarios(){
 function checkPreventDone(){
   if (pv.a == null || pv.b == null) return;
   const pts = pv.a + pv.b; record('prevent', pts);
-  doneBanner('#pv-done', pts, 'diagnose', 'Rule 3: Read the case');
+  doneBanner('#pv-done', pts, 'diagnose', t('rule3label'));
 }
 
 /* ---------- RULE 3: diagnose ---------- */
-const CASES = [
+const CASES = merge([
   { who:'Maya, 16', id:'CASE 01', day:2, chart:[['Temp','39.6 °C'],['Day of fever','2'],['Travel','Back 5 days ago from the Caribbean, where arbovirus cases are confirmed']],
     story:'High fever, a pounding headache, pain behind her eyes, and aching muscles and bones. She feels nauseous.',
     qs:[
@@ -1162,7 +1247,7 @@ const CASES = [
         {t:'A medicine will cure it fast', why:'CDC notes there are no medicines to treat chikungunya. Care focuses on rest, fluids and pain relief.'},
         {t:'Lifelong paralysis is expected', why:'That isn’t typical, though joints may stay sore for a long time.'}]}
     ]}
-];
+], TR.cases);
 let dx = { ci:0, qi:0, right:0 };
 const DX_TOTAL = CASES.reduce((a, c) => a + c.qs.length, 0);
 function initDx(){ dx = { ci:0, qi:0, right:0 }; $('#dx-part').hidden = false; $('#dx-done').innerHTML = ''; renderCase(); }
@@ -1170,12 +1255,12 @@ function drawTimeline(day){
   const X = d => 170 + d / 21 * 450;
   let g = '';
   g += '<rect x="' + X(3) + '" y="18" width="' + (X(7) - X(3)) + '" height="166" style="fill:var(--bite);opacity:.08"/>';
-  g += '<text class="ax" x="' + X(5) + '" y="14" text-anchor="middle">warning signs often start</text>';
+  g += '<text class="ax" x="' + X(5) + '" y="14" text-anchor="middle">' + t('tlWarn') + '</text>';
   const rows = [
-    ['Fever', 0, 7, 'var(--bite)', .55],
-    ['RT-PCR (virus)', 0, 7, 'var(--water)', 1],
-    ['NS1 (dengue protein)', 0, 7, 'var(--water)', .5],
-    ['IgM antibodies', 4, 21, 'var(--amber-fill)', 1]
+    [t('tlFever'), 0, 7, 'var(--bite)', .55],
+    [t('tlPcr'), 0, 7, 'var(--water)', 1],
+    [t('tlNs1'), 0, 7, 'var(--water)', .5],
+    [t('tlIgm'), 4, 21, 'var(--amber-fill)', 1]
   ];
   rows.forEach((r, i) => {
     const y = 32 + i * 38;
@@ -1183,18 +1268,18 @@ function drawTimeline(day){
     g += '<line class="grid" x1="' + X(0) + '" x2="' + X(21) + '" y1="' + (y + 9) + '" y2="' + (y + 9) + '"/>';
     g += '<rect x="' + X(r[1]) + '" y="' + y + '" width="' + (X(r[2]) - X(r[1])) + '" height="18" rx="4" style="fill:' + r[3] + ';opacity:' + r[4] + '"/>';
   });
-  g += '<text class="ax" x="' + (X(21) - 4) + '" y="' + (32 + 3 * 38 + 13) + '" text-anchor="end" style="fill:var(--ink)">lasts ~3 months →</text>';
+  g += '<text class="ax" x="' + (X(21) - 4) + '" y="' + (32 + 3 * 38 + 13) + '" text-anchor="end" style="fill:var(--ink)">' + t('tlLasts') + '</text>';
   [0, 3, 5, 7, 10, 14, 21].forEach(d => { g += '<text class="ax" x="' + X(d) + '" y="200" text-anchor="middle">' + d + '</text>'; });
-  g += '<text class="axl" x="10" y="200">Day of illness</text>';
+  g += '<text class="axl" x="10" y="200">' + t('tlDay') + '</text>';
   if (day != null) {
     g += '<line x1="' + X(day) + '" x2="' + X(day) + '" y1="22" y2="186" style="stroke:var(--ink);stroke-width:2"/>';
-    g += '<text x="' + X(day) + '" y="216" text-anchor="middle" class="ink" style="font-family:var(--f-mono);font-size:12px;font-weight:600">today: day ' + day + '</text>';
+    g += '<text x="' + X(day) + '" y="216" text-anchor="middle" class="ink" style="font-family:var(--f-mono);font-size:12px;font-weight:600">' + t('tlToday', {d:day}) + '</text>';
   }
   $('#tl-svg').innerHTML = g;
 }
 function renderCase(){
   const c = CASES[dx.ci];
-  $('#dx-progress').textContent = 'Case file ' + (dx.ci + 1) + ' of ' + CASES.length;
+  $('#dx-progress').textContent = t('caseFile', {i:dx.ci + 1, n:CASES.length});
   $('#dx-chart').innerHTML = '<div class="ch-head"><div class="id">' + c.id + '</div><div class="who">' + c.who + '</div></div><dl>' +
     c.chart.map(r => '<dt>' + r[0] + '</dt><dd class="mono">' + r[1] + '</dd>').join('') + '</dl><p class="story">' + c.story + '</p>';
   drawTimeline(c.day);
@@ -1205,9 +1290,9 @@ function renderDxQ(){
   nx.hidden = true;
   mcq($('#dx-q'), q, ok => {
     if (ok) dx.right++;
-    $('#dx-pts').innerHTML = '<b>' + dx.right + '</b> of ' + DX_TOTAL + ' correct';
+    $('#dx-pts').innerHTML = t('dxCorrect', {r:dx.right, n:DX_TOTAL});
     const lastQ = dx.qi === c.qs.length - 1, lastC = dx.ci === CASES.length - 1;
-    nx.textContent = lastQ && lastC ? 'See my results' : lastQ ? 'Next case file' : 'Next question';
+    nx.textContent = lastQ && lastC ? t('seeResults') : lastQ ? t('nextCase') : t('nextQ');
     nx.hidden = false; nx.focus({preventScroll:true});
   });
 }
@@ -1221,15 +1306,15 @@ $('#dx-next').addEventListener('click', () => {
     $('#dx-part').hidden = true;
     drawTimeline(null);
     const host = $('#dx-done'); host.innerHTML = '';
-    host.append(el('div', 'part', '<h3>Case files closed</h3><p class="sub" style="margin-top:8px">You got ' + dx.right + ' of ' + DX_TOTAL + ' right. Key ideas: in the first week, test for the virus (RT-PCR, NS1). After that, test for antibodies (IgM), and remember that related viruses can cross-react. With dengue, warning signs usually start 24 to 48 hours after the fever goes away.</p>' + src('cdc-dengue-dx cdc-dengue-sx')));
-    const r = el('div', 'row'); const again = el('button', 'btn ghost', 'Review the cases again'); again.type = 'button';
+    host.append(el('div', 'part', '<h3>' + t('casesClosed') + '</h3><p class="sub" style="margin-top:8px">' + t('casesSummary', {r:dx.right, n:DX_TOTAL}) + '</p>' + src('cdc-dengue-dx cdc-dengue-sx')));
+    const r = el('div', 'row'); const again = el('button', 'btn ghost', t('reviewCases')); again.type = 'button';
     again.addEventListener('click', initDx); r.append(again); host.lastChild.append(r);
-    const holder = el('div'); holder.id = 'dx-done-b'; host.append(holder); doneBanner('#dx-done-b', pts, 'final', 'Outbreak drill');
+    const holder = el('div'); holder.id = 'dx-done-b'; host.append(holder); doneBanner('#dx-done-b', pts, 'final', t('finalLabel'));
   }
 });
 
 /* ---------- FINAL ---------- */
-const FINAL = [
+const FINAL = merge([
   {q:'Why do only female Aedes mosquitoes bite?', src:'cdc-aedes', opts:[{t:'They need blood to make eggs', ok:true},{t:'Males don’t have mouths'},{t:'Females are bigger and hungrier'},{t:'To spread viruses on purpose'}]},
   {q:'When are the mosquitoes that spread dengue most active?', src:'who-dengue', opts:[{t:'During the day',ok:true},{t:'Only at midnight'},{t:'Only in winter'},{t:'Only indoors at night'}], explain:'That’s why protection during the day matters for dengue.'},
   {q:'How long can Aedes eggs survive without water?', src:'cdc-aedes', opts:[{t:'Up to about 8 months',ok:true},{t:'A few hours'},{t:'One day'},{t:'They can’t survive dry'}], explain:'That’s why you scrub containers, not just empty them.'},
@@ -1240,37 +1325,37 @@ const FINAL = [
   {q:'Which pain reliever should be used when dengue is possible?', src:'cdc-dengue-tx', opts:[{t:'Acetaminophen',ok:true},{t:'Aspirin'},{t:'Ibuprofen'},{t:'Any of them'}], explain:'Aspirin and ibuprofen can increase bleeding risk.'},
   {q:'For which virus does a single vaccine dose give most people long-lasting protection?', src:'cdc-yf-vax who-zika', opts:[{t:'Yellow fever',ok:true},{t:'Zika'},{t:'West Nile'},{t:'None of them'}], explain:'For most people a booster isn’t needed. There is no Zika vaccine yet.'},
   {q:'Wolbachia is being used to fight dengue. What is it?', src:'utarini', opts:[{t:'A bacterium that makes mosquitoes less likely to be infected with dengue',ok:true},{t:'A new bug spray'},{t:'A dengue vaccine'},{t:'A type of bed net'}], explain:'In Yogyakarta, Indonesia, releasing these mosquitoes cut dengue cases by 77% and dengue hospitalizations by 86%.'}
-];
+], TR.final);
 function initFinal(){
   const host = $('#fq');
   let i = 0, right = 0, streak = 0, best = 0;
   const qs = shuffle(FINAL.slice());
   function show(){
     host.innerHTML = '';
-    const head = el('div', 'qhead', '<span class="eyebrow">Question ' + (i + 1) + ' of ' + qs.length + '</span><span class="streak" id="fq-streak">Streak ' + streak + '</span>');
+    const head = el('div', 'qhead', '<span class="eyebrow">' + t('question', {i:i + 1, n:qs.length}) + '</span><span class="streak" id="fq-streak">' + t('streak', {n:streak}) + '</span>');
     const bar = el('div', 'bar', '<i style="width:' + (i / qs.length * 100) + '%"></i>');
     const qhost = el('div'); const row = el('div', 'row');
     host.append(head, bar, qhost, row);
     mcq(qhost, qs[i], ok => {
       if (ok) { right++; streak++; best = Math.max(best, streak); } else streak = 0;
-      $('#fq-streak').textContent = 'Streak ' + streak;
-      if (ok && streak >= 3) toast(streak + ' in a row!');
-      const nx = el('button', 'btn', i < qs.length - 1 ? 'Next question' : 'See my score'); nx.type = 'button';
+      $('#fq-streak').textContent = t('streak', {n:streak});
+      if (ok && streak >= 3) toast(t('inARow', {n:streak}));
+      const nx = el('button', 'btn', i < qs.length - 1 ? t('nextQ') : t('seeScore')); nx.type = 'button';
       nx.addEventListener('click', () => { if (i < qs.length - 1) { i++; show(); } else finish(); });
       row.append(nx); nx.focus({preventScroll:true});
     });
   }
   function finish(){
     const pts = right * 10; record('final', pts);
-    const t = total();
+    const tot = total();
     host.innerHTML = '';
-    host.append(el('p', 'eyebrow', 'Drill complete'));
+    host.append(el('p', 'eyebrow', t('drillComplete')));
     host.append(el('p', 'bigscore', pts + '<span style="font-size:24px;color:var(--muted)"> / 100</span>'));
-    host.append(el('p', 'sub', 'Longest streak: ' + best + '. Your total across all rules is <b>' + t + ' / 400</b>, which earns the rank <b>' + rankName(t) + '</b>.' + (MISSIONS.every(m => S.done[m]) ? '' : ' Play the rules you skipped to raise it.')));
+    host.append(el('p', 'sub', t('finalSummary', {b:best, t:tot, rank:rankName(tot)}) + (MISSIONS.every(m => S.done[m]) ? '' : t('skipped'))));
     const r = el('div', 'row');
-    const again = el('button', 'btn', 'Play the drill again'); again.type = 'button';
+    const again = el('button', 'btn', t('playDrillAgain')); again.type = 'button';
     again.addEventListener('click', initFinal);
-    const home = el('button', 'btn ghost', 'Back to all rules'); home.type = 'button'; home.dataset.go = 'hub';
+    const home = el('button', 'btn ghost', t('backAll')); home.type = 'button'; home.dataset.go = 'hub';
     r.append(again, home); host.append(r);
   }
   show();
@@ -1280,13 +1365,16 @@ function initFinal(){
 (function(){
   const b = $('#reset'); let armed = false, t;
   b.addEventListener('click', () => {
-    if (!armed) { armed = true; b.textContent = 'Click again to erase all scores'; t = setTimeout(() => { armed = false; b.textContent = 'Reset my progress'; }, 4000); return; }
-    clearTimeout(t); armed = false; b.textContent = 'Reset my progress';
-    const sw = S.swats; S = fresh(); S.swats = sw; save(); renderHud(); renderRules(); toast('Progress reset.');
+    if (!armed) { armed = true; b.textContent = window.__t('resetConfirm'); t = setTimeout(() => { armed = false; b.textContent = window.__t('resetBtn'); }, 4000); return; }
+    clearTimeout(t); armed = false; b.textContent = window.__t('resetBtn');
+    const sw = S.swats; S = fresh(); S.swats = sw; save(); renderHud(); renderRules(); toast(window.__t('resetDone'));
   });
 })();
 
 renderRefs(); renderHud(); renderRules();
+[['#cyA-pts', 50], ['#cyB-pts', 10], ['#cyC-pts', 40], ['#pvA-pts', 60], ['#pvB-pts', 40], ['#dx-pts', 100]].forEach(([s, n]) => { $(s).innerHTML = t('upTo', {n}); });
+$('#yd-time').textContent = fmt(40, 1) + ' s';
+$('#reset').textContent = t('resetBtn');
 const h = (location.hash || '').replace('#', '');
 if (['cycle', 'prevent', 'diagnose', 'final'].includes(h)) go(h);
 })();
