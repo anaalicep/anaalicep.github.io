@@ -1101,7 +1101,7 @@ const CASES = [
         {t:'It’s the only day a test works', why:'Different tests work at different times. See the lab cheat sheet.'},
         {t:'It isn’t important, the illness is over', why:'Warning signs usually begin in the 24 to 48 hours after the fever goes away.'}]}
     ]},
-  { who:'Jordan, 17', id:'CASE 02', day:10, chart:[['Temp','36.9 °C'],['Day since fever began','10'],['Travel','Brazil, 2 weeks ago']],
+  { who:'Jordan, 17', id:'CASE 02', day:10, chart:[['Temp','36.9 °C'],['Day since fever began','10'],['Travel','Back 2 weeks ago from an area with confirmed arbovirus cases']],
     story:'Had a fever, rash and joint pain last week. Feels fine now. The doctor wants to know what infection it was.',
     qs:[
       {q:'It’s day 10. What’s the best test?', src:'cdc-dengue-dx', opts:[
@@ -1115,7 +1115,7 @@ const CASES = [
         {t:'The lab made a mistake', why:'This is a known limitation of antibody tests, not an error.'},
         {t:'RT-PCR and NS1 tests have the same problem', why:'CDC notes that RT-PCR and NS1 tests do not cross-react with other flaviviruses. The problem is with antibody tests.'}]}
     ]},
-  { who:'Ms. Alvarez, 27', id:'CASE 03', day:3, chart:[['Temp','37.9 °C'],['Pregnant','20 weeks'],['Travel','Back from an area with a Zika outbreak']],
+  { who:'Ms. Alvarez, 27', id:'CASE 03', day:3, chart:[['Temp','37.9 °C'],['Pregnant','20 weeks'],['Travel','Back 3 days ago from an area with confirmed arbovirus cases, including Zika']],
     story:'Mild rash, red itchy eyes and achy joints. She feels only a little sick.',
     qs:[
       {q:'Her symptoms are mild. Why is testing still important?', src:'who-zika', opts:[
@@ -1129,14 +1129,14 @@ const CASES = [
         {t:'Only after the rash is completely gone', why:'Testing works best while she still has symptoms.'},
         {t:'Wait until the baby is born', why:'Testing now allows monitoring during the pregnancy.'}]}
     ]},
-  { who:'Mr. Okafor, 68', id:'CASE 04', day:4, chart:[['Temp','39.1 °C'],['Location','Colorado, late August'],['Travel','None']],
+  { who:'Mr. Okafor, 68', id:'CASE 04', day:4, chart:[['Temp','39.1 °C'],['Season','Late summer'],['Travel','None']],
     story:'Gardens every evening. Fever, very bad headache, stiff neck, and today he seems confused.',
     qs:[
-      {q:'Which virus is most likely?', src:'cdc-wnv cdc-wnv-sx', opts:[
-        {t:'West Nile', ok:true, why:'It’s the leading mosquito-borne disease in the contiguous US. His age raises the risk of illness affecting the brain.'},
-        {t:'Dengue', why:'He hasn’t traveled, and dengue isn’t normally spread in Colorado.'},
-        {t:'Zika', why:'He hasn’t traveled, and Zika is usually mild.'},
-        {t:'Chikungunya', why:'Chikungunya mainly causes fever and joint pain, and he hasn’t traveled.'}]},
+      {q:'Which virus is most likely?', src:'cdc-wnv-cause cdc-wnv-sx who-zika', opts:[
+        {t:'West Nile', ok:true, why:'He caught it close to home in late summer, and West Nile spreads locally through mosquitoes that bite infected birds. His age also raises the risk of illness affecting the brain.'},
+        {t:'Dengue', why:'Confusion and a stiff neck point to an infection of the brain, which fits West Nile much better than dengue.'},
+        {t:'Zika', why:'Zika is usually mild and doesn’t typically cause confusion and a stiff neck.'},
+        {t:'Chikungunya', why:'Chikungunya mainly causes fever and joint pain, not confusion and a stiff neck.'}]},
       {q:'Confusion and a stiff neck mean the virus may have reached his brain. What’s the right first test?', src:'cdc-wnv-dx', opts:[
         {t:'West Nile IgM antibody test on blood and/or spinal fluid', ok:true, why:'This is CDC’s recommended first test. Positive results should be confirmed because of cross-reacting antibodies.'},
         {t:'NS1 antigen test', why:'NS1 is a dengue test.'},
@@ -1148,13 +1148,13 @@ const CASES = [
         {t:'Only if he gets bitten at night', why:'Time of day doesn’t matter. People don’t carry enough virus to infect mosquitoes.'},
         {t:'Yes, but only for one day', why:'People don’t infect mosquitoes with West Nile at any point.'}]}
     ]},
-  { who:'Kai, 15', id:'CASE 05', day:3, chart:[['Temp','39.4 °C'],['Day of fever','3'],['Travel','Back from India 1 week ago']],
+  { who:'Kai, 15', id:'CASE 05', day:3, chart:[['Temp','39.4 °C'],['Day of fever','3'],['Travel','Back 1 week ago from an area with confirmed arbovirus cases']],
     story:'Fever with joint pain so bad in both wrists and ankles that Kai can’t open a water bottle.',
     qs:[
       {q:'Which virus is most likely?', src:'cdc-chik-sx who-chik', opts:[
         {t:'Chikungunya', ok:true, why:'Fever and severe joint pain are its most common symptoms. The name comes from the Kimakonde language and means “that which bends up,” describing people bent over by joint pain.'},
         {t:'West Nile', why:'Most West Nile infections have no symptoms, and severe joint pain isn’t typical.'},
-        {t:'Yellow fever', why:'Yellow fever is found in parts of Africa and South America.'},
+        {t:'Yellow fever', why:'Severe joint pain in both wrists and ankles is the hallmark of chikungunya, not yellow fever.'},
         {t:'Strep throat', why:'That’s a bacterial throat infection.'}]},
       {q:'What should Kai expect?', src:'cdc-chik-sx who-chik', opts:[
         {t:'The joint pain may last weeks or even months', ok:true, why:'Joint pain can be severe and disabling and may last for months, so follow-up care matters.'},
