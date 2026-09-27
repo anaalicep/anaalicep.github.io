@@ -410,12 +410,12 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
       <p class="sub" data-i18n="c.cSub">An infected mosquito is only dangerous if it lives long enough to finish the extrinsic incubation period. Warmth speeds up the virus but also wears out the mosquito. Slide the temperature and find where an infected mosquito is most likely to become infectious. Then lock it in to reveal the full curve.</p>
       <div class="lab">
         <div class="slider-row">
-          <label for="temp">18 °C</label>
+          <label for="temp" id="t-min">64 °F</label>
           <input type="range" id="temp" min="18" max="36" step="0.5" value="22">
-          <label for="temp">36 °C</label>
+          <label for="temp" id="t-max">97 °F</label>
         </div>
         <div class="stats">
-          <div class="stat"><div class="k" data-i18n="c.statTemp">Temperature</div><div class="val" id="t-val">22.0 °C</div></div>
+          <div class="stat"><div class="k" data-i18n="c.statTemp">Temperature</div><div class="val" id="t-val">71.6 °F</div></div>
           <div class="stat"><div class="k" data-i18n="c.statEip">Extrinsic incubation period</div><div class="val" id="t-eip">–</div></div>
           <div class="stat"><div class="k" data-i18n="c.statLife">Average mosquito lifespan</div><div class="val" id="t-life">–</div></div>
         </div>
@@ -423,7 +423,7 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
         <div class="svgbox"><svg id="t-svg" data-i18n-aria="tsvg" viewBox="0 0 600 250" role="img" aria-label="Chart of transmission chance by temperature"></svg></div>
         <div class="row"><button class="btn" type="button" id="t-lock" data-i18n="c.lock">Lock in this temperature</button></div>
         <div id="t-fb"></div>
-        <p class="note" data-i18n="c.note">This is a simplified teaching model for dengue in <i>Aedes aegypti</i>. Its shape follows real data: Mordecai et al. (2017) found that dengue, Zika and chikungunya spread between about 18 and 34 °C, with the most transmission between 26 and 29 °C. The exact numbers here are for illustration, not forecasting.</p>
+        <p class="note" data-i18n="c.note">This is a simplified teaching model for dengue in <i>Aedes aegypti</i>. Its shape follows real data: Mordecai et al. (2017) found that dengue, Zika and chikungunya spread between about 64 and 93 °F, with the most transmission between 79 and 84 °F. The exact numbers here are for illustration, not forecasting.</p>
         <p class="src" data-src="mordecai"></p>
       </div>
     </div>
@@ -589,8 +589,8 @@ const EN_UI = {
   best:'Best {n} / 100', notPlayed:'Not played', step:'Step {n}',
   perfectChain:'Perfect chain. No mistakes.', chainDone1:'Chain complete with 1 wrong pick.', chainDoneN:'Chain complete with {n} wrong picks.',
   hint:'Hint: {h}', upTo:'up to <b>{n}</b> pts', ptsOf:'<b>{n}</b> / {max} pts',
-  tempAxis:'Temperature (°C)', lockReveal:'Lock in a temperature to reveal the full curve', peakReal:'peak in real data [{n}]', days:'{n} days',
-  tempFb:'<strong>You picked {t} °C.</strong> In this model risk peaks around 28 °C. Real-world data put the peak between 26 and 29 °C, and show almost no transmission below about 18 °C or above 34 °C. When it’s cool, the virus takes weeks to reach the saliva and most mosquitoes die first. When it’s very hot, the virus is fast but mosquitoes die within days. That’s why temperature shapes where and when these viruses spread.',
+  tempAxis:'Temperature (°F)', lockReveal:'Lock in a temperature to reveal the full curve', peakReal:'peak in real data [{n}]', days:'{n} days',
+  tempFb:'<strong>You picked {t} °F.</strong> In this model risk peaks around 82 °F. Real-world data put the peak between 79 and 84 °F, and show almost no transmission below about 64 °F or above 93 °F. When it’s cool, the virus takes weeks to reach the saliva and most mosquitoes die first. When it’s very hot, the virus is fast but mosquitoes die within days. That’s why temperature shapes where and when these viruses spread.',
   ruleComplete:'Rule complete', pointsOf:'{n} / 100 points', nextRule:'Next: {label} →',
   rule2label:'Rule 2: Break it early', rule3label:'Rule 3: Read the case', finalLabel:'Outbreak drill',
   tipped:'Tipped', safe:'Safe', missed:'Missed', yardCleared:'Yard cleared.', timesUp:'Time’s up.',
@@ -621,6 +621,9 @@ function t(key, vars){
   if (vars) s = s.replace(/\{(\w+)\}/g, (m, k) => vars[k] != null ? vars[k] : m);
   return s;
 }
+const USE_F = LANG === 'en';
+const toF = c => c * 9 / 5 + 32;
+const tempStr = (c, d) => USE_F ? fmt(toF(c), d) + ' °F' : fmt(c, d) + ' °C';
 const fmt = (n, d) => { try { return Number(n).toLocaleString(LOCALE, { minimumFractionDigits:d, maximumFractionDigits:d }); } catch(e) { return Number(n).toFixed(d); } };
 // Lay translated text over the English data, keeping answers, sources and structure from the English version.
 function merge(base, over){
@@ -816,7 +819,7 @@ const FACTS_EN = [
   ['Aedes females lay eggs on the inside walls of containers, just above the water line.', 'cdc-aedes'],
   ['Releasing mosquitoes carrying Wolbachia bacteria cut dengue cases by 77% in a trial in Yogyakarta, Indonesia.', 'utarini'],
   ['West Nile is the leading mosquito-borne disease in the contiguous United States.', 'cdc-wnv'],
-  ['Dengue, Zika and chikungunya spread between about 18 and 34 °C, with the most transmission between 26 and 29 °C.', 'mordecai'],
+  ['Dengue, Zika and chikungunya spread between about 64 and 93 °F, with the most transmission between 79 and 84 °F.', 'mordecai'],
   ['Only about 1 in 4 people infected with dengue get sick.', 'cdc-dengue'],
   ['In a lab test, a citronella candle had no effect on mosquitoes.', 'rodriguez']
 ];
@@ -984,7 +987,8 @@ function initTempLab(){
   function draw(T){
     let g = '';
     for (let p = 0; p <= 0.5001; p += 0.1) g += '<line class="grid" x1="56" x2="576" y1="' + Y(p) + '" y2="' + Y(p) + '"/><text class="ax" x="48" y="' + (Y(p) + 4) + '" text-anchor="end">' + Math.round(p * 100) + '%</text>';
-    for (let t = 18; t <= 36; t += 2) g += '<text class="ax" x="' + X(t) + '" y="230" text-anchor="middle">' + t + '°</text>';
+    if (USE_F) { for (let f = 65; f <= 95; f += 5) g += '<text class="ax" x="' + X((f - 32) * 5 / 9) + '" y="230" text-anchor="middle">' + f + '°</text>'; }
+    else { for (let t = 18; t <= 36; t += 2) g += '<text class="ax" x="' + X(t) + '" y="230" text-anchor="middle">' + t + '°</text>'; }
     g += '<text class="axl" x="316" y="248" text-anchor="middle">' + window.__t('tempAxis') + '</text>';
     if (locked) {
       let pts = [];
@@ -1003,12 +1007,13 @@ function initTempLab(){
   }
   function update(){
     const T = parseFloat(inp.value);
-    $('#t-val').textContent = fmt(T, 1) + ' °C';
+    $('#t-val').textContent = tempStr(T, 1);
     $('#t-eip').textContent = t('days', {n:fmt(eip(T), 1)});
     $('#t-life').textContent = t('days', {n:fmt(1 / (1 - surv(T)), 1)});
     $('#t-chance').textContent = fmt(chance(T) * 100, 1) + '%';
     draw(T);
   }
+  $('#t-min').textContent = tempStr(18, 0); $('#t-max').textContent = tempStr(36, 0);
   inp.addEventListener('input', update);
   $('#t-lock').addEventListener('click', () => {
     if (locked) return;
@@ -1019,7 +1024,7 @@ function initTempLab(){
     $('#t-lock').disabled = true;
     const fb = $('#t-fb');
     fb.className = 'fb ' + (cy.c === 40 ? 'fb-good' : cy.c === 25 ? 'fb-info' : 'fb-bad');
-    fb.innerHTML = t('tempFb', {t:fmt(T, 1)}) + src('mordecai');
+    fb.innerHTML = t('tempFb', {t:fmt(USE_F ? toF(T) : T, 1)}) + src('mordecai');
     update(); checkCycleDone();
   });
   update();
@@ -1226,7 +1231,7 @@ function checkPreventDone(){
 
 /* ---------- RULE 3: diagnose ---------- */
 const CASES = merge([
-  { who:'Maya, 16', id:'CASE 01', day:2, chart:[['Temp','39.6 °C'],['Day of fever','2'],['Travel','Back 5 days ago from the Caribbean, where arbovirus cases are confirmed']],
+  { who:'Maya, 16', id:'CASE 01', day:2, chart:[['Temp','103.3 °F'],['Day of fever','2'],['Travel','Back 5 days ago from the Caribbean, where arbovirus cases are confirmed']],
     story:'High fever, a pounding headache, pain behind her eyes, and aching muscles and bones. She feels nauseous.',
     qs:[
       {q:'Which virus is most likely?', src:'cdc-dengue-sx cdc-yf', opts:[
@@ -1245,7 +1250,7 @@ const CASES = merge([
         {t:'Aspirin', why:'Aspirin can increase the risk of bleeding in dengue.'},
         {t:'Antibiotics', why:'Antibiotics don’t work on viruses.'}]}
     ]},
-  { who:'Maya, 16', id:'CASE 01 · FOLLOW-UP', day:5, chart:[['Temp','37.2 °C'],['Day of illness','5'],['Test result','NS1 positive: dengue']],
+  { who:'Maya, 16', id:'CASE 01 · FOLLOW-UP', day:5, chart:[['Temp','99.0 °F'],['Day of illness','5'],['Test result','NS1 positive: dengue']],
     story:'Her fever went away yesterday and she thought she was getting better. Today she has strong belly pain, has vomited four times since morning, and her gums bleed when she brushes.',
     qs:[
       {q:'What should happen now?', src:'cdc-dengue-sx who-dengue', opts:[
@@ -1259,7 +1264,7 @@ const CASES = merge([
         {t:'It’s the only day a test works', why:'Different tests work at different times. See the lab cheat sheet.'},
         {t:'It isn’t important, the illness is over', why:'Warning signs usually begin in the 24 to 48 hours after the fever goes away.'}]}
     ]},
-  { who:'Jordan, 17', id:'CASE 02', day:10, chart:[['Temp','36.9 °C'],['Day since fever began','10'],['Travel','Back 2 weeks ago from South America, where arbovirus cases are confirmed']],
+  { who:'Jordan, 17', id:'CASE 02', day:10, chart:[['Temp','98.4 °F'],['Day since fever began','10'],['Travel','Back 2 weeks ago from South America, where arbovirus cases are confirmed']],
     story:'Had a fever, rash and joint pain last week. Feels fine now. The doctor wants to know what infection it was.',
     qs:[
       {q:'It’s day 10. What’s the best test?', src:'cdc-dengue-dx', opts:[
@@ -1273,7 +1278,7 @@ const CASES = merge([
         {t:'The lab made a mistake', why:'This is a known limitation of antibody tests, not an error.'},
         {t:'RT-PCR and NS1 tests have the same problem', why:'CDC notes that RT-PCR and NS1 tests do not cross-react with other flaviviruses. The problem is with antibody tests.'}]}
     ]},
-  { who:'Ms. Alvarez, 27', id:'CASE 03', day:3, chart:[['Temp','37.9 °C'],['Pregnant','20 weeks'],['Travel','Back 3 days ago from an area with confirmed arbovirus cases, including Zika']],
+  { who:'Ms. Alvarez, 27', id:'CASE 03', day:3, chart:[['Temp','100.2 °F'],['Pregnant','20 weeks'],['Travel','Back 3 days ago from an area with confirmed arbovirus cases, including Zika']],
     story:'Mild rash, red itchy eyes and achy joints. She feels only a little sick.',
     qs:[
       {q:'Her symptoms are mild. Why is testing still important?', src:'who-zika', opts:[
@@ -1287,7 +1292,7 @@ const CASES = merge([
         {t:'Only after the rash is completely gone', why:'Testing works best while she still has symptoms.'},
         {t:'Wait until the baby is born', why:'Testing now allows monitoring during the pregnancy.'}]}
     ]},
-  { who:'Mr. Okafor, 68', id:'CASE 04', day:4, chart:[['Temp','39.1 °C'],['Season','Late summer'],['Travel','None']],
+  { who:'Mr. Okafor, 68', id:'CASE 04', day:4, chart:[['Temp','102.4 °F'],['Season','Late summer'],['Travel','None']],
     story:'Gardens every evening. Fever, very bad headache, stiff neck, and today he seems confused.',
     qs:[
       {q:'Which virus is most likely?', src:'cdc-wnv-cause cdc-wnv-sx who-zika', opts:[
@@ -1306,7 +1311,7 @@ const CASES = merge([
         {t:'Only if he gets bitten at night', why:'Time of day doesn’t matter. People don’t carry enough virus to infect mosquitoes.'},
         {t:'Yes, but only for one day', why:'People don’t infect mosquitoes with West Nile at any point.'}]}
     ]},
-  { who:'Kai, 15', id:'CASE 05', day:3, chart:[['Temp','39.4 °C'],['Day of fever','3'],['Travel','Back 1 week ago from South Asia, where arbovirus cases are confirmed']],
+  { who:'Kai, 15', id:'CASE 05', day:3, chart:[['Temp','102.9 °F'],['Day of fever','3'],['Travel','Back 1 week ago from South Asia, where arbovirus cases are confirmed']],
     story:'Fever with joint pain so bad in both wrists and ankles that Kai can’t open a water bottle.',
     qs:[
       {q:'Which virus is most likely?', src:'cdc-chik-sx who-chik', opts:[
@@ -1392,7 +1397,7 @@ const FINAL = merge([
   {q:'When are the mosquitoes that spread dengue most active?', src:'who-dengue', opts:[{t:'During the day',ok:true},{t:'Only at midnight'},{t:'Only in winter'},{t:'Only indoors at night'}], explain:'That’s why protection during the day matters for dengue.'},
   {q:'How long can Aedes eggs survive without water?', src:'cdc-aedes', opts:[{t:'Up to about 8 months',ok:true},{t:'A few hours'},{t:'One day'},{t:'They can’t survive dry'}], explain:'That’s why you scrub containers, not just empty them.'},
   {q:'What is the extrinsic incubation period?', src:'cdc-wnv-cause mordecai', opts:[{t:'The time it takes before an infected mosquito can pass the virus on',ok:true},{t:'The time before a person gets symptoms'},{t:'How long a mosquito lives'},{t:'How long eggs take to hatch'}], explain:'The time before a person gets symptoms is the intrinsic incubation period.'},
-  {q:'Across dengue, Zika and chikungunya, transmission is highest at about…', src:'mordecai', opts:[{t:'26–29 °C',ok:true},{t:'10–15 °C'},{t:'35–40 °C'},{t:'Temperature doesn’t matter'}], explain:'Transmission happens between about 18 and 34 °C.'},
+  {q:'Across dengue, Zika and chikungunya, transmission is highest at about…', src:'mordecai', opts:[{t:'79–84 °F',ok:true},{t:'50–59 °F'},{t:'95–104 °F'},{t:'Temperature doesn’t matter'}], explain:'Transmission happens between about 64 and 93 °F.'},
   {q:'Why can’t people pass West Nile back to mosquitoes?', src:'cdc-wnv-cause', opts:[{t:'Too little virus gets into their blood',ok:true},{t:'Mosquitoes don’t bite people'},{t:'The virus dies at body temperature'},{t:'People are always vaccinated'}], explain:'Birds are the hosts that keep the cycle going.'},
   {q:'Day 2 of fever after a trip to a dengue area. Which tests fit best?', src:'cdc-dengue-dx', opts:[{t:'RT-PCR or NS1, plus an IgM test',ok:true},{t:'IgM antibody test only'},{t:'A strep test'},{t:'No test until day 30'}], explain:'Early on, look for the virus. After day 7, IgM is the main test.'},
   {q:'Which pain reliever should be used when dengue is possible?', src:'cdc-dengue-tx', opts:[{t:'Acetaminophen',ok:true},{t:'Aspirin'},{t:'Ibuprofen'},{t:'Any of them'}], explain:'Aspirin and ibuprofen can increase bleeding risk.'},
