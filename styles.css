@@ -334,6 +334,15 @@ a:hover { color: var(--carnelian); }
 
 .news-more summary:hover { color: var(--carnelian); }
 
+/* ---------- outreach ---------- */
+
+.outreach {
+  padding: 0 0 72px;
+  background: var(--cream-2);
+}
+
+.outreach .pub-venue { max-width: 64ch; }
+
 /* ---------- contact ---------- */
 
 .contact {

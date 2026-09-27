@@ -1,0 +1,1294 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Bite Club: a game for high school students about mosquito-borne viruses, how they spread, how to prevent them, and how they are diagnosed.">
+<title>Bite Club</title>
+<meta name="author" content="Ana Alice Pimenta Pereira">
+<link rel="canonical" href="https://anapimentapereira.com/bite-club/">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ana Alice Pimenta Pereira">
+<meta property="og:url" content="https://anapimentapereira.com/bite-club/">
+<meta property="og:title" content="Bite Club">
+<meta property="og:description" content="A free game for high school students about how mosquitoes spread viruses, how to prevent bites, and how infections are diagnosed.">
+<meta name="twitter:card" content="summary">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Chakra+Petch:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#F1F4EE; --surface:#FFFFFF; --surface-2:#E4EBE3; --ink:#13202A; --muted:#55665F; --line:#C9D4CC;
+  --water:#0E7A72; --water-soft:#D2EBE7; --amber:#B97C07; --amber-fill:#E9A21B; --amber-soft:#FBEBC7;
+  --bite:#C43A2F; --bite-soft:#F7DCD8; --good:#2A7F47; --good-soft:#D8EFDF;
+  --wing:rgba(19,32,42,.16); --band:#FFFFFF;
+  --f-display:"Chakra Petch","Arial Narrow",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0D1513; --surface:#15201D; --surface-2:#1C2A26; --ink:#E4EDE8; --muted:#93A7A0; --line:#2B3B36;
+    --water:#3BC0B2; --water-soft:#12393A; --amber:#F2BE4A; --amber-fill:#F2BE4A; --amber-soft:#3A2E12;
+    --bite:#F0705F; --bite-soft:#3E1C18; --good:#5CCB7F; --good-soft:#16331F;
+    --wing:rgba(228,237,232,.18); --band:#0D1513;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0D1513; --surface:#15201D; --surface-2:#1C2A26; --ink:#E4EDE8; --muted:#93A7A0; --line:#2B3B36;
+  --water:#3BC0B2; --water-soft:#12393A; --amber:#F2BE4A; --amber-fill:#F2BE4A; --amber-soft:#3A2E12;
+  --bite:#F0705F; --bite-soft:#3E1C18; --good:#5CCB7F; --good-soft:#16331F;
+  --wing:rgba(228,237,232,.18); --band:#0D1513;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.55}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.05}
+p{margin:0}
+a{color:var(--water)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--amber-fill);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:20px}
+@media (max-width:480px){.wrap{padding-inline:16px}}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.bands{height:6px;background:repeating-linear-gradient(90deg,var(--ink) 0 22px,transparent 22px 30px)}
+
+/* top bar */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:12px}
+.brand{font-family:var(--f-display);font-weight:700;font-size:20px;letter-spacing:.06em;text-transform:uppercase;background:none;border:0;padding:0;cursor:pointer}
+.hud{display:flex;align-items:center;gap:14px}
+.pips{display:flex;gap:6px}
+.pip{width:12px;height:12px;border-radius:50%;border:2px solid var(--ink)}
+.pip.on{background:var(--ink)}
+.total{font-family:var(--f-mono);font-size:14px;font-variant-numeric:tabular-nums}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;border:2px solid var(--ink);background:var(--ink);color:var(--bg);font-family:var(--f-display);font-weight:600;font-size:16px;letter-spacing:.03em;padding:10px 18px;border-radius:8px;cursor:pointer;text-decoration:none}
+.btn:hover{filter:brightness(1.15)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.ghost:hover{background:var(--surface-2);filter:none}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.back{background:none;border:0;padding:6px 0;font-family:var(--f-mono);font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);cursor:pointer}
+.back:hover{color:var(--ink)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.05fr 1fr;gap:36px;align-items:center;padding-block:44px 28px}
+.hero h1{font-size:clamp(56px,9vw,104px);text-transform:uppercase;letter-spacing:.01em;font-weight:700}
+.hero .rule1{font-family:var(--f-display);font-weight:500;font-size:clamp(20px,2.4vw,26px);margin-top:14px;line-height:1.25}
+.hero .rule1 em{font-style:normal;background:var(--amber-soft);padding:0 4px;border-radius:3px}
+.hero .lead{margin-top:16px;max-width:52ch;color:var(--muted)}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.swat{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:14px;aspect-ratio:4/3;max-width:100%;overflow:hidden;cursor:crosshair;touch-action:manipulation}
+.swat canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.swat .cap{position:absolute;left:14px;right:14px;bottom:12px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;pointer-events:none}
+.swat .cap .fact{font-size:14px;line-height:1.4;max-width:34ch;background:var(--surface);padding:6px 8px;border-radius:6px;border:1px solid var(--line)}
+.swat .cap .fact:empty{display:none}
+.swat .tag{position:absolute;left:14px;top:12px;pointer-events:none}
+.swat .count{font-family:var(--f-mono);font-size:13px;background:var(--ink);color:var(--bg);padding:4px 8px;border-radius:5px;white-space:nowrap}
+@media (max-width:820px){.hero{grid-template-columns:1fr;gap:24px;padding-block:28px 20px}}
+
+/* rules grid */
+.section{padding-block:28px}
+.section-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.section-head h2{font-size:clamp(28px,4vw,38px);text-transform:uppercase}
+.rank{font-family:var(--f-mono);font-size:14px;color:var(--muted)}
+.rank b{color:var(--ink)}
+.rules{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media (max-width:700px){.rules{grid-template-columns:1fr}}
+.rule{display:grid;grid-template-columns:auto 1fr;gap:4px 18px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;cursor:pointer;transition:transform .15s,border-color .15s}
+.rule:hover{transform:translateY(-2px);border-color:var(--ink)}
+.rule .num{grid-row:1/span 3;font-family:var(--f-display);font-weight:700;font-size:56px;line-height:.9;color:var(--water)}
+.rule h3{font-size:24px}
+.rule p{color:var(--muted);font-size:15px}
+.rule .status{display:flex;gap:8px;align-items:center;margin-top:8px;font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.chip{display:inline-block;padding:3px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface-2);color:var(--muted);font-family:var(--f-mono);font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+.chip.done{background:var(--good-soft);border-color:var(--good);color:var(--good)}
+
+/* field guide table */
+.tablebox{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:15px}
+th,td{text-align:left;vertical-align:top;padding:12px 14px;border-bottom:1px solid var(--line)}
+tr:last-child td{border-bottom:0}
+th{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;background:var(--surface-2)}
+td.v{font-family:var(--f-display);font-weight:600;font-size:18px;white-space:nowrap}
+td i{font-style:italic}
+
+/* mission views */
+.mission{padding-block:22px 48px}
+.mhead{display:grid;gap:10px;margin-block:8px 26px}
+.mhead h2{font-size:clamp(34px,5.5vw,56px);text-transform:uppercase}
+.mhead p{max-width:62ch;color:var(--muted)}
+.part{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:20px}
+@media (max-width:480px){.part{padding:16px}}
+.part-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.part h3{font-size:24px}
+.part .sub{color:var(--muted);max-width:64ch;margin-bottom:16px}
+.pts{font-family:var(--f-mono);font-size:13px;color:var(--muted)}
+.pts b{color:var(--ink)}
+
+/* cycle ordering */
+.cyc{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media (max-width:760px){.cyc{grid-template-columns:1fr}}
+.slots{list-style:none;margin:0;padding:0;display:grid;gap:8px;counter-reset:s}
+.slot{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:center;min-height:54px;padding:8px 12px;border:2px dashed var(--line);border-radius:10px;font-size:15px}
+.slot .n{font-family:var(--f-mono);font-weight:600;font-size:14px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);color:var(--muted)}
+.slot.filled{border-style:solid;border-color:var(--water);background:var(--water-soft)}
+.slot.filled .n{background:var(--water);color:var(--bg)}
+.slot .tagline{display:block;font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--water)}
+.slot.next{border-color:var(--ink)}
+.pool{display:grid;gap:8px;align-content:start}
+.card{text-align:left;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);cursor:pointer;font-size:15px;line-height:1.4}
+.card:hover{border-color:var(--ink)}
+.shake{animation:shake .35s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.loopnote{margin-top:12px;font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.brackets{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:16px}
+@media (max-width:600px){.brackets{grid-template-columns:1fr}}
+.brk{padding:12px 14px;border-radius:10px;background:var(--surface-2);font-size:15px}
+.brk b{font-family:var(--f-display);font-size:17px;display:block;margin-bottom:2px}
+
+/* mcq */
+.q-text{font-weight:700;font-size:18px;margin-bottom:12px;max-width:66ch}
+.opts{display:grid;gap:8px}
+.opt{display:grid;grid-template-columns:24px 1fr;gap:10px;align-items:start;text-align:left;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);cursor:pointer;font-size:16px;line-height:1.4}
+.opt:hover:not(:disabled){border-color:var(--ink);background:var(--surface-2)}
+.opt:disabled{cursor:default}
+.opt-mark{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-family:var(--f-mono);font-size:13px;font-weight:600;margin-top:1px}
+.opt.correct{border-color:var(--good);background:var(--good-soft)}
+.opt.correct .opt-mark{border-color:var(--good);background:var(--good);color:var(--bg)}
+.opt.correct .opt-mark::after{content:"✓"}
+.opt.wrong{border-color:var(--bite);background:var(--bite-soft)}
+.opt.wrong .opt-mark{border-color:var(--bite);background:var(--bite);color:var(--bg)}
+.opt.wrong .opt-mark::after{content:"✕"}
+.opt.sel .opt-mark{border-color:var(--ink);background:var(--ink)}
+.opt.missed{border-style:dashed;border-color:var(--good)}
+.opt .why{display:block;font-size:14px;color:var(--muted);margin-top:4px}
+.fb{margin-top:12px;padding:12px 14px;border-radius:10px;font-size:15px;max-width:72ch}
+.fb-good{background:var(--good-soft)}
+.fb-bad{background:var(--bite-soft)}
+.fb-info{background:var(--surface-2)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:16px}
+
+/* temperature lab */
+.lab{display:grid;grid-template-columns:1fr;gap:16px}
+.slider-row{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center}
+.slider-row label{font-family:var(--f-mono);font-size:13px;color:var(--muted)}
+.tempval{font-family:var(--f-display);font-weight:700;font-size:34px;min-width:4.2ch;text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--water);height:28px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media (max-width:600px){.stats{grid-template-columns:1fr}}
+.stat{padding:12px 14px;border-radius:10px;background:var(--surface-2)}
+.stat .k{font-size:13px;color:var(--muted);line-height:1.3}
+.stat .val{font-family:var(--f-mono);font-size:26px;font-weight:600;margin-top:4px;font-variant-numeric:tabular-nums}
+.stat.hot .val{color:var(--bite)}
+.svgbox{overflow-x:auto}
+.svgbox svg{display:block;width:100%;min-width:520px;height:auto}
+svg .ax{fill:var(--muted);font-family:var(--f-mono);font-size:11px}
+svg .axl{fill:var(--muted);font-family:var(--f-body);font-size:12px}
+svg .grid{stroke:var(--line);stroke-width:1}
+svg .ink{fill:var(--ink)}
+.note{font-size:13px;color:var(--muted);max-width:72ch}
+
+/* yard game */
+.yard-hud{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.yard-hud .stat .val{font-size:24px}
+.yard-wrap{position:relative}
+.yard{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:12px;border-radius:12px;background:var(--surface-2)}
+@media (max-width:760px){.yard{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:480px){.yard{grid-template-columns:repeat(2,1fr)}}
+.tile{display:grid;justify-items:center;gap:6px;padding:14px 8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);cursor:pointer;font-size:14px;line-height:1.25;text-align:center;min-height:120px;position:relative}
+.tile:hover:not(:disabled){border-color:var(--ink)}
+.tile:disabled{cursor:default}
+.tile svg{width:52px;height:52px;color:var(--ink)}
+.tile svg .s{fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.tile svg .w,.tile svg .wk{fill:var(--water);opacity:.6;stroke:none;transition:opacity .3s}
+.tile.tipped{background:var(--good-soft);border-color:var(--good)}
+.tile.tipped svg .w{opacity:0}
+.tile.oops{background:var(--bite-soft);border-color:var(--bite)}
+.tile .flag{position:absolute;top:6px;right:6px}
+.tile .flag:empty{display:none}
+.yard-cover{position:absolute;inset:0;display:grid;place-items:center;background:color-mix(in srgb,var(--bg) 78%,transparent);border-radius:12px;padding:16px;text-align:center}
+.yard-cover .box{display:grid;gap:12px;justify-items:center;max-width:44ch}
+.results{display:grid;gap:8px;margin-top:14px}
+.res{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;font-size:15px;padding:10px 12px;border-radius:8px;background:var(--surface-2)}
+.res b{font-family:var(--f-display)}
+
+/* scenarios */
+.scen-top{display:flex;justify-content:space-between;gap:12px;align-items:baseline;flex-wrap:wrap}
+.scen-title{font-family:var(--f-display);font-weight:600;font-size:21px;margin:6px 0 12px;max-width:60ch;line-height:1.25}
+
+/* diagnosis */
+.dx-grid{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:820px){.dx-grid{grid-template-columns:1fr}}
+.chart{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
+.chart .ch-head{padding:12px 14px;background:var(--ink);color:var(--bg)}
+.chart .ch-head .who{font-family:var(--f-display);font-weight:600;font-size:20px}
+.chart .ch-head .id{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;opacity:.8}
+.chart dl{margin:0;display:grid;grid-template-columns:auto 1fr}
+.chart dt,.chart dd{margin:0;padding:8px 14px;border-bottom:1px solid var(--line);font-size:14px}
+.chart dt{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-top:10px}
+.chart dd{padding-left:0}
+.chart .story{padding:12px 14px;font-size:15px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);margin-top:8px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:14px;height:10px;border-radius:2px;display:inline-block}
+
+/* final */
+.qhead{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+.streak{font-family:var(--f-mono);font-size:13px;padding:4px 10px;border-radius:999px;background:var(--amber-soft);color:var(--ink)}
+.bar{height:6px;border-radius:3px;background:var(--surface-2);overflow:hidden;margin-bottom:18px}
+.bar i{display:block;height:100%;background:var(--water);transition:width .3s}
+.bigscore{font-family:var(--f-display);font-weight:700;font-size:64px;line-height:1}
+
+.done-banner{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:14px;padding:18px 20px;border-radius:14px;background:var(--ink);color:var(--bg)}
+.done-banner h3{font-size:24px}
+.done-banner .btn{background:var(--bg);color:var(--ink);border-color:var(--bg)}
+
+.src{display:block;margin-top:8px;font-family:var(--f-mono);font-size:12px;letter-spacing:.02em;color:var(--muted);line-height:1.5}
+.src a{color:inherit;text-decoration:underline;text-decoration-color:var(--water);text-underline-offset:2px}
+.src a:hover{color:var(--water)}
+.src .rn{color:var(--water);font-weight:600}
+sup.cite{font-family:var(--f-mono);font-size:10px;line-height:0;margin-left:1px}
+sup.cite a{color:var(--water);text-decoration:none}
+sup.cite a:hover{text-decoration:underline}
+.swat .cap .fact .src{margin-top:4px;font-size:11px}
+.swat .cap .fact{pointer-events:auto}
+.refs{margin:0;padding-left:26px;display:grid;gap:6px;font-size:14px}
+.refs li{padding-left:4px;scroll-margin-top:90px}
+.refs li:target{background:var(--amber-soft);border-radius:4px}
+.refs a{word-break:break-word}
+footer{padding-block:28px 48px;color:var(--muted);font-size:14px}
+footer .cols{display:grid;grid-template-columns:1.2fr 1fr;gap:28px}
+@media (max-width:760px){footer .cols{grid-template-columns:1fr}}
+footer h3{font-size:16px;color:var(--ink);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
+
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);opacity:0;transition:all .25s;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;font-size:15px;max-width:min(520px,calc(100% - 32px));z-index:50;pointer-events:none}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap">
+    <button class="brand" id="brand" type="button" aria-label="Bite Club home">Bite Club</button>
+    <div class="hud">
+      <a href="#refs" class="eyebrow" style="text-decoration:none">References</a>
+      <div class="pips" id="pips" aria-label="Rules completed"></div>
+      <span class="total" id="total">0 / 400 pts</span>
+    </div>
+  </div>
+  <div class="bands" aria-hidden="true"></div>
+</header>
+
+<main>
+<!-- HUB -->
+<section id="view-hub">
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <p class="eyebrow">A game about mosquito-borne viruses</p>
+        <h1>Bite<br>Club</h1>
+        <p class="rule1">The first rule of Bite Club: <em>don't get bitten.</em></p>
+        <p class="lead">Dengue, Zika, chikungunya, yellow fever and West Nile all travel the same way: from one host to the next inside a mosquito. Learn how the chain works, how to break it, and how doctors figure out who's infected.</p>
+        <div class="ctas">
+          <button class="btn" type="button" data-go="cycle">Start with Rule 1</button>
+          <a class="btn ghost" href="#guide">Field guide</a>
+        </div>
+      </div>
+      <div class="swat" id="swat" role="img" aria-label="A mosquito flying around. Tap it to swat it and reveal a fact.">
+        <canvas id="swatCanvas"></canvas>
+        <div class="tag eyebrow">Warm-up · tap the mosquito</div>
+        <div class="cap"><p class="fact" id="swatFact" aria-live="polite"></p><span class="count" id="swatCount">0 swatted</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap section">
+    <div class="section-head">
+      <h2>The rules</h2>
+      <p class="rank" id="rankLine">Rank: <b>Rookie Inspector</b></p>
+    </div>
+    <div class="rules" id="rules"></div>
+  </div>
+
+  <div class="wrap section" id="guide">
+    <div class="section-head"><h2>Field guide</h2><p class="rank">Five viruses, two kinds of mosquito</p></div>
+    <div class="tablebox">
+      <table>
+        <thead><tr><th>Virus</th><th>Main mosquito</th><th>Where it spreads</th><th>What it does</th><th>Vaccine?</th></tr></thead>
+        <tbody>
+          <tr><td class="v">Dengue</td><td><i>Aedes aegypti</i>, <i>Ae. albopictus</i>. Active during the day.<sup class="cite" data-r="who-dengue"></sup></td><td>Tropical and subtropical regions worldwide</td><td>About 1 in 4 infected people get sick.<sup class="cite" data-r="cdc-dengue"></sup> Fever with pain behind the eyes, muscle, joint or bone pain, nausea, rash.<sup class="cite" data-r="cdc-dengue-sx"></sup> A second infection raises the risk of severe dengue.<sup class="cite" data-r="who-dengue"></sup></td><td>One vaccine is licensed in some countries. WHO recommends it only for ages 6–16 in high-transmission areas.<sup class="cite" data-r="who-dengue"></sup></td></tr>
+          <tr><td class="v">Zika</td><td><i>Aedes</i>. Also spreads through sex and during pregnancy.<sup class="cite" data-r="cdc-zika"></sup></td><td>Tropical and subtropical regions</td><td>Usually mild or no symptoms: rash, fever, red eyes, joint pain. Infection during pregnancy can cause microcephaly and other birth defects.<sup class="cite" data-r="who-zika"></sup></td><td>No vaccine yet<sup class="cite" data-r="who-zika"></sup></td></tr>
+          <tr><td class="v">Chikungunya</td><td><i>Aedes</i></td><td>Africa, Asia, the Americas and other regions</td><td>Fever and joint pain that can be severe and last for months.<sup class="cite" data-r="cdc-chik-sx"></sup></td><td>Two vaccines approved in several countries, not yet widely available.<sup class="cite" data-r="who-chik"></sup> CDC recommends vaccination for some travelers.<sup class="cite" data-r="cdc-chik"></sup></td></tr>
+          <tr><td class="v">Yellow fever</td><td><i>Aedes</i> and related mosquitoes</td><td>Parts of Africa and South America<sup class="cite" data-r="cdc-yf"></sup></td><td>Often mild, but some people develop severe illness with jaundice (yellow skin and eyes) and bleeding.<sup class="cite" data-r="cdc-yf"></sup></td><td>Yes. For most people one dose gives long-lasting protection with no booster.<sup class="cite" data-r="cdc-yf-vax"></sup></td></tr>
+          <tr><td class="v">West Nile</td><td><i>Culex</i>. The virus cycles between these mosquitoes and birds.<sup class="cite" data-r="cdc-wnv-cause"></sup></td><td>Worldwide. The leading mosquito-borne disease in the contiguous US.<sup class="cite" data-r="cdc-wnv"></sup></td><td>8 in 10 infected people have no symptoms. Fewer than 1 in 100 get severe illness of the brain or spinal cord. People 65 and older face 3 times the risk.<sup class="cite" data-r="cdc-wnv-sx"></sup></td><td>None for people</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- RULE 1: CYCLE -->
+<section id="view-cycle" hidden>
+  <div class="wrap mission">
+    <button class="back" type="button" data-go="hub">← All rules</button>
+    <div class="mhead">
+      <p class="eyebrow">Rule 1 of 3 · The transmission cycle</p>
+      <h2>Know the chain</h2>
+      <p>A mosquito doesn't make viruses. It carries them from one infected person to the next. Every link in that chain takes time, and each one is a place where the chain can break.</p>
+    </div>
+
+    <div class="part">
+      <div class="part-head"><h3>Part A: Put the chain in order</h3><span class="pts" id="cyA-pts">up to <b>50</b> pts</span></div>
+      <p class="sub">Dengue is spreading through a neighborhood. Tap the steps in the order they happen, starting with an infected person. Wrong picks cost points.</p>
+      <div class="cyc">
+        <ol class="slots" id="cy-slots"></ol>
+        <div>
+          <div class="pool" id="cy-pool"></div>
+          <p class="loopnote" id="cy-loop">After step 6 the chain loops back to step 1.</p>
+        </div>
+      </div>
+      <div id="cy-after" hidden>
+        <div class="brackets">
+          <div class="brk"><b>Extrinsic incubation period (steps 3–4)</b>The time inside the mosquito before it can pass the virus on. It often takes about a week, and it gets shorter as temperature rises (see Part C).<sup class="cite" data-r="cdc-wnv-cause"></sup><sup class="cite" data-r="mordecai"></sup></div>
+          <div class="brk"><b>Intrinsic incubation period (step 6)</b>The time inside a person before they get sick. For dengue, usually 4 to 10 days.<sup class="cite" data-r="who-dengue"></sup></div>
+        </div>
+        <p class="src" data-src="who-dengue cdc-dengue-tx cdc-aedes"></p>
+        <div class="row"><button class="btn ghost" type="button" id="cy-reset">Replay Part A</button></div>
+      </div>
+    </div>
+
+    <div class="part">
+      <div class="part-head"><h3>Part B: The dead end</h3><span class="pts" id="cyB-pts">up to <b>10</b> pts</span></div>
+      <p class="sub">West Nile virus runs a different loop: <i>Culex</i> mosquitoes pass it between birds. People get bitten by accident.</p>
+      <div id="cy-wnv"></div>
+    </div>
+
+    <div class="part">
+      <div class="part-head"><h3>Part C: Temperature lab</h3><span class="pts" id="cyC-pts">up to <b>40</b> pts</span></div>
+      <p class="sub">An infected mosquito is only dangerous if it lives long enough to finish the extrinsic incubation period. Warmth speeds up the virus but also wears out the mosquito. Slide the temperature and find where an infected mosquito is most likely to become infectious. Then lock it in to reveal the full curve.</p>
+      <div class="lab">
+        <div class="slider-row">
+          <label for="temp">18 °C</label>
+          <input type="range" id="temp" min="18" max="36" step="0.5" value="22">
+          <label for="temp">36 °C</label>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="k">Temperature</div><div class="val" id="t-val">22.0 °C</div></div>
+          <div class="stat"><div class="k">Extrinsic incubation period</div><div class="val" id="t-eip">–</div></div>
+          <div class="stat"><div class="k">Average mosquito lifespan</div><div class="val" id="t-life">–</div></div>
+        </div>
+        <div class="stat hot"><div class="k">Chance an infected mosquito lives long enough to become infectious</div><div class="val" id="t-chance">–</div></div>
+        <div class="svgbox"><svg id="t-svg" viewBox="0 0 600 250" role="img" aria-label="Chart of transmission chance by temperature"></svg></div>
+        <div class="row"><button class="btn" type="button" id="t-lock">Lock in this temperature</button></div>
+        <div id="t-fb"></div>
+        <p class="note">This is a simplified teaching model for dengue in <i>Aedes aegypti</i>. Its shape follows real data: Mordecai et al. (2017) found that dengue, Zika and chikungunya spread between about 18 and 34 °C, with the most transmission between 26 and 29 °C. The exact numbers here are for illustration, not forecasting.</p>
+        <p class="src" data-src="mordecai"></p>
+      </div>
+    </div>
+    <div id="cy-done"></div>
+  </div>
+</section>
+
+<!-- RULE 2: PREVENT -->
+<section id="view-prevent" hidden>
+  <div class="wrap mission">
+    <button class="back" type="button" data-go="hub">← All rules</button>
+    <div class="mhead">
+      <p class="eyebrow">Rule 2 of 3 · Prevention</p>
+      <h2>Break it early</h2>
+      <p><i>Aedes</i> females lay their eggs on the inside walls of containers, just above the water line. The eggs become adult mosquitoes in 7 to 10 days.<sup class="cite" data-r="cdc-aedes"></sup> Take away the water and you take away the next generation.</p>
+    </div>
+
+    <div class="part">
+      <div class="part-head"><h3>Part A: Tip &amp; Toss</h3><span class="pts" id="pvA-pts">up to <b>60</b> pts</span></div>
+      <p class="sub">You have 40 seconds to clear this yard. Tap everything that's holding standing water. Every second a container stays wet, more mosquitoes hatch. Careful: some things are already safe, and tapping them wastes time.</p>
+      <div class="yard-hud">
+        <div class="stat"><div class="k">Time left</div><div class="val" id="yd-time">40.0 s</div></div>
+        <div class="stat hot"><div class="k">Mosquitoes hatched</div><div class="val" id="yd-mosq">0</div></div>
+        <div class="stat"><div class="k">Points</div><div class="val" id="yd-pts">0</div></div>
+      </div>
+      <div class="yard-wrap">
+        <div class="yard" id="yard"></div>
+        <div class="yard-cover" id="yd-cover"><div class="box"><p><b>Ready?</b> 8 things in this yard are breeding sites. Find them fast.</p><button class="btn" type="button" id="yd-start">Start the clock</button></div></div>
+      </div>
+      <div id="yd-results"></div>
+    </div>
+
+    <div class="part">
+      <div class="part-head"><h3>Part B: Pack your protection</h3><span class="pts" id="pvB-pts">up to <b>40</b> pts</span></div>
+      <p class="sub">For each situation, select <b>every</b> option that actually helps, then check your answer. Some popular products don't work.</p>
+      <div id="scen"></div>
+    </div>
+    <div id="pv-done"></div>
+  </div>
+</section>
+
+<!-- RULE 3: DIAGNOSE -->
+<section id="view-diagnose" hidden>
+  <div class="wrap mission">
+    <button class="back" type="button" data-go="hub">← All rules</button>
+    <div class="mhead">
+      <p class="eyebrow">Rule 3 of 3 · Diagnosis</p>
+      <h2>Read the case</h2>
+      <p>These viruses cause similar fevers, so doctors use clues: where the patient has been, what hurts, and how many days they've been sick. The day matters most for testing. Early on you look for the virus itself. Later, you look for the antibodies the body made against it.</p>
+    </div>
+
+    <div class="part">
+      <div class="part-head"><h3>Lab cheat sheet</h3><span class="pts">Dengue timeline, day 0 = first day of fever</span></div>
+      <div class="svgbox"><svg id="tl-svg" viewBox="0 0 640 220" role="img" aria-label="Timeline showing when each dengue test works"></svg></div>
+      <div class="legend">
+        <span><i style="background:var(--water)"></i>RT-PCR finds the virus's genetic material</span>
+        <span><i style="background:var(--water);opacity:.5"></i>NS1 finds a dengue protein</span>
+        <span><i style="background:var(--amber-fill)"></i>IgM antibodies (the body's early response)</span>
+      </div>
+      <p class="src" data-src="cdc-dengue-dx cdc-dengue-sx who-dengue"></p>
+    </div>
+
+    <div class="part" id="dx-part">
+      <div class="part-head"><h3 id="dx-progress">Case 1 of 6</h3><span class="pts" id="dx-pts">up to <b>100</b> pts</span></div>
+      <div class="dx-grid">
+        <div class="chart" id="dx-chart"></div>
+        <div>
+          <div id="dx-q"></div>
+          <div class="row"><button class="btn" type="button" id="dx-next" hidden>Next</button></div>
+        </div>
+      </div>
+    </div>
+    <div id="dx-done"></div>
+    <p class="note">These patients are made up for practice. If you or someone you know has a fever after mosquito bites or travel, see a doctor. This game is not medical advice.</p>
+  </div>
+</section>
+
+<!-- FINAL -->
+<section id="view-final" hidden>
+  <div class="wrap mission">
+    <button class="back" type="button" data-go="hub">← All rules</button>
+    <div class="mhead">
+      <p class="eyebrow">Final challenge · 10 questions</p>
+      <h2>Outbreak drill</h2>
+      <p>A mix of everything: the cycle, prevention and diagnosis. Build a streak for bragging rights. Each correct answer is worth 10 points.</p>
+    </div>
+    <div class="part" id="fq"></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="bands" aria-hidden="true" style="margin-bottom:24px"></div>
+    <div class="cols">
+      <div>
+        <h3>For teachers</h3>
+        <p>Made for grades 9–12. Plan on 35–45 minutes for all three rules plus the final drill. Students can play in any order. Progress is saved in each student's own browser only. The field guide table works as a handout for discussion.</p>
+        <p style="margin-top:10px">Every answer in the game shows the source it comes from. Small numbers link to the full reference list. Sources were checked in September 2026.</p>
+        <div class="row"><button class="btn ghost" type="button" id="reset">Reset my progress</button></div>
+        <p style="margin-top:18px">Created by <a href="/">Ana Alice Pimenta Pereira</a>, Cornell University.</p>
+      </div>
+      <div id="refs">
+        <h3>References</h3>
+        <ol class="refs" id="refList"></ol>
+      </div>
+    </div>
+  </div>
+</footer>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+"use strict";
+const $ = s => document.querySelector(s);
+const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const reduced = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- references ---------- */
+const REF_LIST = [
+  ['cdc-dengue', 'CDC: Dengue', 'Centers for Disease Control and Prevention. Dengue.', 'https://www.cdc.gov/dengue/index.html'],
+  ['cdc-dengue-sx', 'CDC: Dengue symptoms', 'Centers for Disease Control and Prevention. Dengue: Signs and Symptoms.', 'https://www.cdc.gov/dengue/signs-symptoms/index.html'],
+  ['cdc-dengue-tx', 'CDC: Dengue treatment', 'Centers for Disease Control and Prevention. Dengue: Treatment.', 'https://www.cdc.gov/dengue/treatment/index.html'],
+  ['cdc-dengue-dx', 'CDC: Dengue testing', 'Centers for Disease Control and Prevention. Dengue: Clinical Testing and Diagnosis.', 'https://www.cdc.gov/dengue/hcp/diagnosis-testing/index.html'],
+  ['who-dengue', 'WHO: Dengue fact sheet', 'World Health Organization. Dengue and severe dengue (fact sheet).', 'https://www.who.int/news-room/fact-sheets/detail/dengue-and-severe-dengue'],
+  ['cdc-zika', 'CDC: Zika', 'Centers for Disease Control and Prevention. Zika Virus.', 'https://www.cdc.gov/zika/index.html'],
+  ['cdc-zika-test', 'CDC: Zika testing', 'Centers for Disease Control and Prevention. Zika: Testing.', 'https://www.cdc.gov/zika/testing/index.html'],
+  ['cdc-zika-prev', 'CDC: Zika prevention', 'Centers for Disease Control and Prevention. Zika: Prevention.', 'https://www.cdc.gov/zika/prevention/index.html'],
+  ['who-zika', 'WHO: Zika fact sheet', 'World Health Organization. Zika virus (fact sheet).', 'https://www.who.int/news-room/fact-sheets/detail/zika-virus'],
+  ['cdc-chik', 'CDC: Chikungunya', 'Centers for Disease Control and Prevention. Chikungunya Virus.', 'https://www.cdc.gov/chikungunya/index.html'],
+  ['cdc-chik-sx', 'CDC: Chikungunya symptoms', 'Centers for Disease Control and Prevention. Chikungunya: Signs and Symptoms.', 'https://www.cdc.gov/chikungunya/signs-symptoms/index.html'],
+  ['who-chik', 'WHO: Chikungunya fact sheet', 'World Health Organization. Chikungunya (fact sheet).', 'https://www.who.int/news-room/fact-sheets/detail/chikungunya'],
+  ['cdc-yf', 'CDC: Yellow fever', 'Centers for Disease Control and Prevention. Yellow Fever.', 'https://www.cdc.gov/yellow-fever/index.html'],
+  ['cdc-yf-vax', 'CDC: Yellow fever vaccine', 'Centers for Disease Control and Prevention. Yellow Fever Vaccine.', 'https://www.cdc.gov/yellow-fever/vaccine/index.html'],
+  ['cdc-wnv', 'CDC: West Nile', 'Centers for Disease Control and Prevention. West Nile Virus.', 'https://www.cdc.gov/west-nile-virus/index.html'],
+  ['cdc-wnv-cause', 'CDC: How West Nile spreads', 'Centers for Disease Control and Prevention. West Nile: Causes and How It Spreads.', 'https://www.cdc.gov/west-nile-virus/causes/index.html'],
+  ['cdc-wnv-sx', 'CDC: West Nile symptoms', 'Centers for Disease Control and Prevention. West Nile: Symptoms, Diagnosis, and Treatment.', 'https://www.cdc.gov/west-nile-virus/signs-symptoms/index.html'],
+  ['cdc-wnv-dx', 'CDC: West Nile testing', 'Centers for Disease Control and Prevention. West Nile: Clinical Testing and Diagnosis.', 'https://www.cdc.gov/west-nile-virus/hcp/diagnosis-testing/index.html'],
+  ['cdc-aedes', 'CDC: Aedes life cycle', 'Centers for Disease Control and Prevention. Life Cycle of Aedes Mosquitoes.', 'https://www.cdc.gov/mosquitoes/about/life-cycle-of-aedes-mosquitoes.html'],
+  ['cdc-home', 'CDC: Mosquito control at home', 'Centers for Disease Control and Prevention. Mosquito Control at Home.', 'https://www.cdc.gov/mosquitoes/mosquito-control/mosquito-control-at-home.html'],
+  ['cdc-bites', 'CDC: Preventing mosquito bites', 'Centers for Disease Control and Prevention. Preventing Mosquito Bites.', 'https://www.cdc.gov/mosquitoes/prevention/index.html'],
+  ['mordecai', 'Mordecai et al. 2017', 'Mordecai EA, Cohen JM, Evans MV, et al. Detecting the impact of temperature on transmission of Zika, dengue, and chikungunya using mechanistic models. PLoS Negl Trop Dis. 2017;11(4):e0005568.', 'https://doi.org/10.1371/journal.pntd.0005568'],
+  ['utarini', 'Utarini et al. 2021', 'Utarini A, Indriani C, Ahmad RA, et al. Efficacy of Wolbachia-infected mosquito deployments for the control of dengue. N Engl J Med. 2021;384(23):2177–2186.', 'https://doi.org/10.1056/NEJMoa2030243'],
+  ['rodriguez', 'Rodriguez et al. 2017', 'Rodriguez SD, Chung HN, Gonzales KK, et al. Efficacy of some wearable devices compared with spray-on insect repellents for the yellow fever mosquito, Aedes aegypti. J Insect Sci. 2017;17(1):24.', 'https://doi.org/10.1093/jisesa/iew117']
+];
+const REFS = {};
+REF_LIST.forEach((r, i) => { REFS[r[0]] = { n:i + 1, label:r[1], full:r[2], url:r[3] }; });
+const refLink = k => { const r = REFS[k]; return r ? '<a href="' + r.url + '" target="_blank" rel="noopener"><span class="rn">[' + r.n + ']</span> ' + r.label + '</a>' : ''; };
+function src(keys){
+  if (!keys) return '';
+  const ks = (Array.isArray(keys) ? keys : keys.split(/\s+/)).filter(k => REFS[k]);
+  return ks.length ? '<span class="src">' + (ks.length > 1 ? 'Sources: ' : 'Source: ') + ks.map(refLink).join(' · ') + '</span>' : '';
+}
+function renderRefs(){
+  $('#refList').innerHTML = REF_LIST.map(r => '<li id="ref-' + REFS[r[0]].n + '">' + r[2] + ' <a href="' + r[3] + '" target="_blank" rel="noopener">' + r[3].replace(/^https:\/\//, '') + '</a></li>').join('');
+  document.querySelectorAll('sup.cite[data-r]').forEach(s => { const r = REFS[s.dataset.r]; if (r) s.innerHTML = '<a href="#ref-' + r.n + '" title="' + r.label + '">[' + r.n + ']</a>'; });
+  document.querySelectorAll('.src[data-src]').forEach(p => { p.outerHTML = src(p.dataset.src); });
+}
+
+/* ---------- state ---------- */
+const KEY = 'biteclub-v1';
+const MISSIONS = ['cycle', 'prevent', 'diagnose', 'final'];
+function fresh(){ return { scores:{cycle:0,prevent:0,diagnose:0,final:0}, done:{cycle:false,prevent:false,diagnose:false,final:false}, swats:0 }; }
+let S = fresh();
+try {
+  const raw = JSON.parse(localStorage.getItem(KEY));
+  if (raw) { Object.assign(S.scores, raw.scores || {}); Object.assign(S.done, raw.done || {}); S.swats = raw.swats || 0; }
+} catch(e) {}
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e) {} }
+function record(m, pts){
+  S.scores[m] = Math.max(S.scores[m], Math.round(pts));
+  S.done[m] = true; save(); renderHud(); renderRules();
+}
+const total = () => MISSIONS.reduce((a, m) => a + S.scores[m], 0);
+function rankName(t){
+  if (t >= 340) return 'Chain Breaker';
+  if (t >= 250) return 'Vector Control Officer';
+  if (t >= 150) return 'Field Tech';
+  return 'Rookie Inspector';
+}
+
+let toastT;
+function toast(msg){
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+function renderHud(){
+  const pips = $('#pips'); pips.innerHTML = '';
+  MISSIONS.forEach(m => { const p = el('span', 'pip' + (S.done[m] ? ' on' : '')); p.title = m; pips.append(p); });
+  pips.setAttribute('aria-label', MISSIONS.filter(m => S.done[m]).length + ' of 4 completed');
+  $('#total').textContent = total() + ' / 400 pts';
+  $('#rankLine').innerHTML = 'Rank: <b>' + rankName(total()) + '</b> · ' + total() + ' / 400';
+}
+
+const RULE_CARDS = [
+  {m:'cycle', n:'1', t:'Know the chain', d:'Put the transmission cycle in order, then find the temperature where mosquitoes are most dangerous.'},
+  {m:'prevent', n:'2', t:'Break it early', d:'Clear a yard of breeding sites against the clock, then pick the protection that actually works.'},
+  {m:'diagnose', n:'3', t:'Read the case', d:'Six patients, six fevers. Pick the likely virus, the right test for the day, and what happens next.'},
+  {m:'final', n:'F', t:'Outbreak drill', d:'Ten quick questions across everything. Best played after the three rules.'}
+];
+function renderRules(){
+  const host = $('#rules'); host.innerHTML = '';
+  RULE_CARDS.forEach(r => {
+    const b = el('button', 'rule'); b.type = 'button'; b.dataset.go = r.m;
+    const st = S.done[r.m] ? '<span class="chip done">Best ' + S.scores[r.m] + ' / 100</span>' : '<span class="chip">Not played</span>';
+    b.innerHTML = '<span class="num">' + r.n + '</span><h3>' + r.t + '</h3><p>' + r.d + '</p><div class="status">' + st + '</div>';
+    host.append(b);
+  });
+}
+
+/* ---------- navigation ---------- */
+const VIEWS = ['hub', 'cycle', 'prevent', 'diagnose', 'final'];
+const inited = {};
+function go(v){
+  if (!VIEWS.includes(v)) v = 'hub';
+  VIEWS.forEach(x => { $('#view-' + x).hidden = x !== v; });
+  if (!inited[v]) { inited[v] = true; ({cycle:initCycle, prevent:initPrevent, diagnose:initDx, final:initFinal})[v]?.(); }
+  try { history.replaceState(null, '', v === 'hub' ? location.pathname + location.search : '#' + v); } catch(e) {}
+  window.scrollTo(0, 0);
+}
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-go]');
+  if (t) { e.preventDefault(); go(t.dataset.go); }
+});
+$('#brand').addEventListener('click', () => go('hub'));
+
+/* ---------- reusable multiple choice ---------- */
+function mcq(host, q, done){
+  host.innerHTML = '';
+  host.append(el('p', 'q-text', q.q));
+  const list = el('div', 'opts');
+  const opts = q.keepOrder ? q.opts.slice() : shuffle(q.opts.slice());
+  const fb = el('div', 'fb'); fb.hidden = true; fb.setAttribute('aria-live', 'polite');
+  const btns = opts.map(o => {
+    const b = el('button', 'opt', '<span class="opt-mark" aria-hidden="true"></span><span>' + o.t + '</span>');
+    b.type = 'button';
+    b.addEventListener('click', () => {
+      btns.forEach(x => x.disabled = true);
+      b.classList.add(o.ok ? 'correct' : 'wrong');
+      if (!o.ok) btns[opts.findIndex(x => x.ok)].classList.add('correct');
+      fb.className = 'fb ' + (o.ok ? 'fb-good' : 'fb-bad');
+      fb.innerHTML = '<strong>' + (o.ok ? 'Correct.' : 'Not quite.') + '</strong> ' + (o.why ? o.why + ' ' : '') + (q.explain || '') + src(q.src);
+      fb.hidden = false;
+      done(!!o.ok);
+    });
+    list.append(b); return b;
+  });
+  host.append(list, fb);
+}
+
+/* ---------- hero: swat the mosquito ---------- */
+const FACTS = [
+  ['Only female Aedes mosquitoes bite. They need blood to make eggs.', 'cdc-aedes'],
+  ['The mosquitoes that spread dengue are active during the day.', 'who-dengue'],
+  ['Aedes eggs can survive drying out for up to 8 months.', 'cdc-aedes'],
+  ['An Aedes egg becomes an adult mosquito in 7 to 10 days.', 'cdc-aedes'],
+  ['Aedes females lay eggs on the inside walls of containers, just above the water line.', 'cdc-aedes'],
+  ['Releasing mosquitoes carrying Wolbachia bacteria cut dengue cases by 77% in a trial in Yogyakarta, Indonesia.', 'utarini'],
+  ['West Nile is the leading mosquito-borne disease in the contiguous United States.', 'cdc-wnv'],
+  ['Dengue, Zika and chikungunya spread between about 18 and 34 °C, with the most transmission between 26 and 29 °C.', 'mordecai'],
+  ['Only about 1 in 4 people infected with dengue get sick.', 'cdc-dengue'],
+  ['In a lab test, a citronella candle had no effect on mosquitoes.', 'rodriguez']
+];
+(function initSwat(){
+  const box = $('#swat'), cv = $('#swatCanvas'), ctx = cv.getContext('2d');
+  let W = 0, H = 0, dpr = 1, colors = {};
+  const m = { x:120, y:120, vx:1.2, vy:0.4, tx:200, ty:150, dead:0, sx:0, sy:0 };
+  let factIdx = Math.floor(Math.random() * FACTS.length), frame = 0;
+  $('#swatCount').textContent = S.swats + ' swatted';
+  function readColors(){
+    const cs = getComputedStyle(document.documentElement);
+    colors = { ink: cs.getPropertyValue('--ink').trim(), band: cs.getPropertyValue('--band').trim(), wing: cs.getPropertyValue('--wing').trim(), bite: cs.getPropertyValue('--bite').trim(), water: cs.getPropertyValue('--water-soft').trim() };
+  }
+  function resize(){
+    const r = box.getBoundingClientRect(); dpr = window.devicePixelRatio || 1;
+    W = r.width; H = r.height; cv.width = W * dpr; cv.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    m.x = clamp(m.x, 40, W - 40); m.y = clamp(m.y, 40, H - 60);
+  }
+  function newTarget(){ m.tx = 40 + Math.random() * (W - 80); m.ty = 50 + Math.random() * (H - 120); }
+  function drawMosq(x, y, ang, t){
+    ctx.save(); ctx.translate(x, y); ctx.rotate(ang); const s = Math.min(1.4, Math.max(0.9, W / 420)); ctx.scale(s, s);
+    ctx.lineCap = 'round';
+    // legs
+    const legs = [[-2, 1, -30, 18, -44, 30], [2, 1, 8, 22, 4, 38], [4, 1, 22, 16, 36, 30]];
+    [1, -1].forEach(side => legs.forEach(L => {
+      ctx.beginPath(); ctx.moveTo(L[0], L[1] * side * 3); ctx.lineTo(L[2], L[3] * side); ctx.lineTo(L[4], L[5] * side);
+      ctx.strokeStyle = colors.ink; ctx.lineWidth = 1.6; ctx.setLineDash([]); ctx.stroke();
+      ctx.strokeStyle = colors.band; ctx.lineWidth = 1.1; ctx.setLineDash([2, 4]); ctx.stroke();
+    }));
+    ctx.setLineDash([]);
+    // wings
+    const flap = reduced ? 0.7 : 0.45 + 0.55 * Math.abs(Math.sin(t * 0.9));
+    ctx.fillStyle = colors.wing; ctx.strokeStyle = colors.wing; ctx.lineWidth = 1;
+    [1, -1].forEach(side => { ctx.beginPath(); ctx.ellipse(-12, side * 9 * flap, 16, 4.5 * flap + 1, side * 0.25, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); });
+    // abdomen
+    ctx.fillStyle = colors.ink; ctx.beginPath(); ctx.ellipse(-15, 0, 15, 4.6, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = colors.band; ctx.lineWidth = 1.3;
+    [-24, -18, -12, -6].forEach(bx => { ctx.beginPath(); ctx.moveTo(bx, -3.8); ctx.lineTo(bx, 3.8); ctx.stroke(); });
+    // thorax with lyre
+    ctx.fillStyle = colors.ink; ctx.beginPath(); ctx.ellipse(2, 0, 6.5, 5.5, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = colors.band; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(2, 0, 3.2, Math.PI * 0.6, Math.PI * 1.4); ctx.stroke();
+    ctx.beginPath(); ctx.arc(2, 0, 3.2, -Math.PI * 0.4, Math.PI * 0.4); ctx.stroke();
+    // head, proboscis, antennae
+    ctx.fillStyle = colors.ink; ctx.beginPath(); ctx.arc(11, 0, 3.6, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = colors.ink; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(14, 0.5); ctx.lineTo(29, 2); ctx.stroke();
+    ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(13, -2); ctx.lineTo(22, -7); ctx.moveTo(13, 2); ctx.lineTo(22, 6); ctx.stroke();
+    ctx.restore();
+  }
+  function drawSplat(x, y, k){
+    ctx.save(); ctx.translate(x, y); ctx.globalAlpha = 1 - k;
+    ctx.fillStyle = colors.bite;
+    for (let i = 0; i < 9; i++) { const a = i * 0.7, r = 6 + (i % 3) * 5; ctx.beginPath(); ctx.arc(Math.cos(a) * r * (0.6 + k), Math.sin(a) * r * (0.6 + k), 3 + (i % 2) * 2, 0, Math.PI * 2); ctx.fill(); }
+    ctx.beginPath(); ctx.arc(0, 0, 9, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
+  function loop(ts){
+    requestAnimationFrame(loop);
+    if ($('#view-hub').hidden || !W) return;
+    if (frame++ % 60 === 0) readColors();
+    ctx.clearRect(0, 0, W, H);
+    // faint puddle
+    ctx.fillStyle = colors.water; ctx.beginPath(); ctx.ellipse(W * 0.78, H * 0.8, W * 0.16, H * 0.05, 0, 0, Math.PI * 2); ctx.fill();
+    const t = ts / 16;
+    if (m.dead) {
+      const k = (ts - m.dead) / 900;
+      if (k >= 1) { m.dead = 0; m.x = Math.random() < 0.5 ? -20 : W + 20; m.y = 40 + Math.random() * (H - 120); newTarget(); }
+      else drawSplat(m.sx, m.sy, k);
+      if (m.dead) return;
+    }
+    const speed = reduced ? 0.25 : 1;
+    const dx = m.tx - m.x, dy = m.ty - m.y, d = Math.hypot(dx, dy);
+    if (d < 20) newTarget();
+    m.vx += (dx / (d || 1)) * 0.18 * speed + (Math.random() - 0.5) * 0.9 * speed;
+    m.vy += (dy / (d || 1)) * 0.18 * speed + (Math.random() - 0.5) * 0.9 * speed;
+    const v = Math.hypot(m.vx, m.vy), max = 3.2 * speed;
+    if (v > max) { m.vx *= max / v; m.vy *= max / v; }
+    m.x += m.vx; m.y += m.vy;
+    drawMosq(m.x, m.y + (reduced ? 0 : Math.sin(t * 0.3) * 1.5), Math.atan2(m.vy, m.vx), t);
+  }
+  box.addEventListener('pointerdown', e => {
+    if (m.dead) return;
+    const r = box.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+    if (Math.hypot(x - m.x, y - m.y) < 38) {
+      m.dead = performance.now(); m.sx = m.x; m.sy = m.y;
+      S.swats++; save();
+      $('#swatCount').textContent = S.swats + ' swatted';
+      const f = FACTS[factIdx++ % FACTS.length];
+      $('#swatFact').innerHTML = f[0] + src(f[1]);
+    }
+  });
+  if (window.ResizeObserver) new ResizeObserver(resize).observe(box); else window.addEventListener('resize', resize);
+  readColors(); resize(); newTarget(); requestAnimationFrame(loop);
+})();
+
+/* ---------- RULE 1: cycle ---------- */
+const CYCLE = [
+  {tag:'Infected person', t:'A person infected with dengue has lots of virus in their blood.', hint:'Start with where the virus is before any mosquito shows up.'},
+  {tag:'Blood meal', t:'A female Aedes mosquito bites them and swallows blood carrying the virus.', hint:'How does the virus get from the person into a mosquito?'},
+  {tag:'Gut infection', t:'The virus infects the cells lining the mosquito’s gut.', hint:'The blood goes to the mosquito’s stomach first. What happens there?'},
+  {tag:'Spread to saliva', t:'The virus escapes the gut and travels to the salivary glands.', hint:'The virus is stuck in the gut. Where does it need to go to get out again?'},
+  {tag:'Transmission', t:'The mosquito bites someone new and injects virus with its saliva.', hint:'The mosquito is now infectious. What does it do next?'},
+  {tag:'New case', t:'About 4 to 10 days later, the new person gets sick with virus in their blood.', hint:'What happens to the person who was just bitten?'}
+];
+let cy = { a:null, b:null, c:null };
+function initCycle(){
+  buildOrder();
+  mcq($('#cy-wnv'), {
+    q:'A grandfather catches West Nile from a mosquito bite. Later, a different Culex mosquito bites him. Can that mosquito pick up the virus and spread it to his family?',
+    opts:[
+      {t:'No. People never get enough virus in their blood to infect a mosquito.', ok:true, why:'People are “dead-end hosts” for West Nile. Unlike birds, they don’t develop high enough levels of virus in their blood, so birds are what keep the cycle going.'},
+      {t:'Yes, just like dengue.', why:'For dengue, humans are the main host. West Nile is different: people are dead-end hosts because too little virus gets into their blood.'},
+      {t:'Only if the mosquito bites him within an hour.', why:'Timing isn’t the issue. Humans never get enough West Nile virus in their blood to infect a mosquito.'},
+      {t:'Yes, but only from his saliva.', why:'Mosquitoes pick up viruses from blood, not saliva, and people are dead-end hosts for West Nile.'}
+    ], src:'cdc-wnv-cause'
+  }, ok => { cy.b = ok ? 10 : 0; $('#cyB-pts').innerHTML = '<b>' + cy.b + '</b> / 10 pts'; checkCycleDone(); });
+  initTempLab();
+}
+function buildOrder(){
+  const slots = $('#cy-slots'), pool = $('#cy-pool');
+  slots.innerHTML = ''; pool.innerHTML = ''; $('#cy-after').hidden = true; $('#cy-loop').hidden = false;
+  let placed = 0, wrong = 0;
+  $('#cyA-pts').innerHTML = 'up to <b>50</b> pts';
+  CYCLE.forEach((s, i) => {
+    const li = el('li', 'slot' + (i === 0 ? ' next' : ''), '<span class="n">' + (i + 1) + '</span><span class="txt" style="color:var(--muted)">Step ' + (i + 1) + '</span>');
+    slots.append(li);
+  });
+  shuffle(CYCLE.map((s, i) => i)).forEach(i => {
+    const b = el('button', 'card', CYCLE[i].t); b.type = 'button';
+    b.addEventListener('click', () => {
+      if (i === placed) {
+        const li = slots.children[placed];
+        li.className = 'slot filled';
+        li.innerHTML = '<span class="n">' + (placed + 1) + '</span><span><span class="tagline">' + CYCLE[i].tag + '</span>' + CYCLE[i].t + '</span>';
+        b.remove(); placed++;
+        if (placed < CYCLE.length) slots.children[placed].classList.add('next');
+        else {
+          cy.a = Math.max(15, 50 - wrong * 6);
+          $('#cyA-pts').innerHTML = '<b>' + cy.a + '</b> / 50 pts';
+          $('#cy-after').hidden = false; $('#cy-loop').hidden = true;
+          toast(wrong === 0 ? 'Perfect chain. No mistakes.' : 'Chain complete with ' + wrong + ' wrong pick' + (wrong > 1 ? 's' : '') + '.');
+          checkCycleDone();
+        }
+      } else {
+        wrong++;
+        b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake');
+        toast('Hint: ' + CYCLE[placed].hint);
+      }
+    });
+    pool.append(b);
+  });
+}
+$('#cy-reset').addEventListener('click', buildOrder);
+
+const eip = T => Math.exp(6.889 - 0.1672 * T);
+const surv = T => T <= 27 ? 0.91 - 0.0012 * (T - 27) ** 2 : 0.91 - 0.007 * (T - 27) ** 2;
+const chance = T => Math.pow(surv(T), eip(T));
+function initTempLab(){
+  const svg = $('#t-svg'), inp = $('#temp');
+  let locked = false;
+  const X = T => 56 + (T - 18) / 18 * 520, Y = p => 210 - p / 0.5 * 180;
+  function draw(T){
+    let g = '';
+    for (let p = 0; p <= 0.5001; p += 0.1) g += '<line class="grid" x1="56" x2="576" y1="' + Y(p) + '" y2="' + Y(p) + '"/><text class="ax" x="48" y="' + (Y(p) + 4) + '" text-anchor="end">' + Math.round(p * 100) + '%</text>';
+    for (let t = 18; t <= 36; t += 2) g += '<text class="ax" x="' + X(t) + '" y="230" text-anchor="middle">' + t + '°</text>';
+    g += '<text class="axl" x="316" y="248" text-anchor="middle">Temperature (°C)</text>';
+    if (locked) {
+      let pts = [];
+      for (let t = 18; t <= 36.001; t += 0.25) pts.push(X(t).toFixed(1) + ',' + Y(chance(t)).toFixed(1));
+      g += '<polygon points="' + X(18) + ',' + Y(0) + ' ' + pts.join(' ') + ' ' + X(36) + ',' + Y(0) + '" style="fill:var(--water-soft)"/>';
+      g += '<polyline points="' + pts.join(' ') + '" style="fill:none;stroke:var(--water);stroke-width:2.5"/>';
+      g += '<rect x="' + X(26) + '" y="22" width="' + (X(29) - X(26)) + '" height="188" style="fill:var(--good);opacity:.12"/>';
+      g += '<text class="ax" x="' + X(27.5) + '" y="16" text-anchor="middle">peak in real data [' + REFS.mordecai.n + ']</text>';
+    } else {
+      g += '<text class="axl" x="316" y="110" text-anchor="middle">Lock in a temperature to reveal the full curve</text>';
+    }
+    const c = chance(T);
+    g += '<line x1="' + X(T) + '" x2="' + X(T) + '" y1="22" y2="210" style="stroke:var(--ink);stroke-width:1.5;stroke-dasharray:4 4"/>';
+    g += '<circle cx="' + X(T) + '" cy="' + Y(c) + '" r="7" style="fill:var(--bite);stroke:var(--surface);stroke-width:2"/>';
+    svg.innerHTML = g;
+  }
+  function update(){
+    const T = parseFloat(inp.value);
+    $('#t-val').textContent = T.toFixed(1) + ' °C';
+    $('#t-eip').textContent = eip(T).toFixed(1) + ' days';
+    $('#t-life').textContent = (1 / (1 - surv(T))).toFixed(1) + ' days';
+    $('#t-chance').textContent = (chance(T) * 100).toFixed(1) + '%';
+    draw(T);
+  }
+  inp.addEventListener('input', update);
+  $('#t-lock').addEventListener('click', () => {
+    if (locked) return;
+    locked = true; inp.disabled = false;
+    const T = parseFloat(inp.value);
+    cy.c = (T >= 26 && T <= 30) ? 40 : (T >= 24.5 && T <= 31.5) ? 25 : 10;
+    $('#cyC-pts').innerHTML = '<b>' + cy.c + '</b> / 40 pts';
+    $('#t-lock').disabled = true;
+    const fb = $('#t-fb');
+    fb.className = 'fb ' + (cy.c === 40 ? 'fb-good' : cy.c === 25 ? 'fb-info' : 'fb-bad');
+    fb.innerHTML = '<strong>You picked ' + T.toFixed(1) + ' °C.</strong> In this model risk peaks around 28 °C. Real-world data put the peak between 26 and 29 °C, and show almost no transmission below about 18 °C or above 34 °C. ' +
+      'When it’s cool, the virus takes weeks to reach the saliva and most mosquitoes die first. When it’s very hot, the virus is fast but mosquitoes die within days. ' +
+      'That’s why temperature shapes where and when these viruses spread.' + src('mordecai');
+    update(); checkCycleDone();
+  });
+  update();
+}
+function checkCycleDone(){
+  if (cy.a == null || cy.b == null || cy.c == null) return;
+  const pts = cy.a + cy.b + cy.c;
+  record('cycle', pts);
+  doneBanner('#cy-done', pts, 'prevent', 'Rule 2: Break it early');
+}
+function doneBanner(sel, pts, next, nextLabel){
+  const host = $(sel); host.innerHTML = '';
+  const d = el('div', 'done-banner', '<div><p class="eyebrow" style="color:inherit;opacity:.75">Rule complete</p><h3>' + pts + ' / 100 points</h3></div>');
+  const b = el('button', 'btn', 'Next: ' + nextLabel + ' →'); b.type = 'button'; b.dataset.go = next;
+  d.append(b); host.append(d);
+}
+
+/* ---------- RULE 2: prevent ---------- */
+const IC = {
+  tire:'<circle class="s" cx="24" cy="24" r="17"/><circle class="s" cx="24" cy="24" r="8"/><path class="w" d="M8 29a17 17 0 0 0 32 0l-8.4-2.2a8 8 0 0 1-15.2 0z"/>',
+  bucket:'<path class="w" d="M12.4 20h23.2l-2.6 19.6H15z"/><path class="s" d="M11 13h26l-3.5 27h-19z"/><path class="s" d="M13 13c0-8 22-8 22 0"/>',
+  saucer:'<path class="w" d="M9.5 32.5h29l-2.6 5H12.1z"/><path class="s" d="M15 12h18l-2.5 19h-13z"/><path class="s" d="M8.5 32h31l-3 6H11.5z"/><path class="s" d="M24 12V5M24 8l-4-3M24 9l4-3"/>',
+  cans:'<path class="w" d="M7 31h23v5H7z"/><rect class="s" x="6" y="23" width="25" height="14" rx="2"/><path class="w" d="M35 34h7v2h-7z"/><path class="s" d="M34 33h9v5h-9z"/>',
+  birdbath:'<path class="w" d="M8 17h32c-1 5-8 8-16 8S9 22 8 17z"/><path class="s" d="M6 16h36c0 7-8 11-18 11S6 23 6 16z"/><path class="s" d="M21 27v11h6V27M15 41h18"/>',
+  gutter:'<path class="s" d="M4 22L24 8l20 14"/><path class="w" d="M7 26h34v3H7z"/><path class="s" d="M6 24h36v6H6z"/><path class="s" d="M39 30v12"/><path class="s" d="M13 24c2-3 5-3 6 0M27 24c2-3 5-3 6 0"/>',
+  tarp:'<path class="w" d="M14 28q10 7 20 0q-10 4-20 0z"/><path class="s" d="M4 20c6 0 8 10 20 10s14-10 20-10v5c-6 0-8 11-20 11S10 25 4 25z"/><circle class="s" cx="6" cy="22" r="1"/><circle class="s" cx="42" cy="22" r="1"/>',
+  vase:'<path class="w" d="M16.5 26h15c1 3 1 6 0 8-1 3-4 5-7.5 5s-6.5-2-7.5-5c-1-2-1-5 0-8z"/><path class="s" d="M18 18c-4 4-5 10-3 16 1 4 4 6 9 6s8-2 9-6c2-6 1-12-3-16z"/><path class="s" d="M24 18V6M24 11l-4-3M24 13l5-3"/>',
+  flipped:'<path class="s" d="M11 38h26l-3.5-26h-19z"/><path class="s" d="M6 41h36"/><path class="s" d="M17 18h14"/>',
+  barrel:'<rect class="s" x="12" y="11" width="24" height="30" rx="4"/><path class="s" d="M10 11h28M12 21h24M12 31h24"/><path class="s" d="M16 7h16M18 7v4M22 7v4M26 7v4M30 7v4"/>',
+  trash:'<path class="s" d="M13 16h22l-2 25H15z"/><path class="s" d="M10 12h28v4H10z"/><path class="s" d="M20 12V9h8v3"/><path class="s" d="M20 21v15M24 21v15M28 21v15"/>',
+  pot:'<path class="s" d="M14 20h20l-3 20H17z"/><path class="s" d="M24 20c0-6-5-9-9-9 0 5 4 9 9 9zM24 20c0-6 5-9 9-9 0 5-4 9-9 9z"/><path class="s" d="M22 43v2M26 43v2"/>'
+};
+const YARD = [
+  {id:'tire', name:'Old tire', wet:true, lesson:'Tires hold rainwater. Empty them, cover them, or throw them out.'},
+  {id:'bucket', name:'Bucket', wet:true, lesson:'Empty and scrub it, then store it upside down.'},
+  {id:'saucer', name:'Flowerpot saucer', wet:true, lesson:'Saucers catch runoff. Empty and scrub them once a week.'},
+  {id:'cans', name:'Can and bottle cap', wet:true, lesson:'Any trash that holds water can raise mosquitoes. Throw it out.'},
+  {id:'birdbath', name:'Birdbath', wet:true, lesson:'Birds can keep it. Empty and scrub it once a week.'},
+  {id:'gutter', name:'Roof gutter', wet:true, lesson:'Leaves clog gutters and trap water. Clean them out.'},
+  {id:'tarp', name:'Tarp over the woodpile', wet:true, lesson:'Folds in a loose tarp hold puddles. Pull it tight or dump the water.'},
+  {id:'vase', name:'Flower vase on the porch', wet:true, lesson:'Vases count too. Empty and scrub them once a week.'},
+  {id:'flipped', name:'Bucket stored upside down', wet:false, lesson:'Already safe. Turning containers over is one of the CDC’s steps.'},
+  {id:'barrel', name:'Rain barrel with a tight lid', wet:false, lesson:'Safe. A tightly covered barrel keeps mosquitoes from getting in to lay eggs.'},
+  {id:'trash', name:'Trash can with a tight lid', wet:false, lesson:'Safe. Covered containers can’t collect rainwater.'},
+  {id:'pot', name:'Potted plant with drain hole, no saucer', wet:false, lesson:'Safe. Water drains right through.'}
+];
+let pv = { a:null, b:null };
+function initPrevent(){ renderYard(false); initScenarios(); }
+function renderYard(active){
+  const host = $('#yard'); host.innerHTML = '';
+  const order = shuffle(YARD.slice());
+  order.forEach(it => {
+    const b = el('button', 'tile', '<span class="flag"></span><svg viewBox="0 0 48 48" aria-hidden="true">' + IC[it.id] + '</svg><span>' + it.name + '</span>');
+    b.type = 'button'; b.disabled = !active; b.dataset.id = it.id;
+    host.append(b);
+  });
+  return order;
+}
+let yard = null;
+$('#yd-start').addEventListener('click', () => {
+  $('#yd-cover').hidden = true; $('#yd-results').innerHTML = '';
+  renderYard(true);
+  yard = { t:40, mosq:0, pts:0, left:YARD.filter(y => y.wet).length, wrong:[], tipped:new Set(), last:performance.now() };
+  const tick = () => {
+    const now = performance.now(), dt = (now - yard.last) / 1000; yard.last = now;
+    yard.t = Math.max(0, yard.t - dt);
+    yard.mosq += yard.left * dt * (4 + Math.random() * 4);
+    $('#yd-time').textContent = yard.t.toFixed(1) + ' s';
+    $('#yd-mosq').textContent = Math.floor(yard.mosq);
+    if (yard.t <= 0) endYard();
+  };
+  yard.timer = setInterval(tick, 100);
+  $('#yd-pts').textContent = '0';
+});
+$('#yard').addEventListener('click', e => {
+  const b = e.target.closest('.tile'); if (!b || !yard || yard.over) return;
+  const it = YARD.find(y => y.id === b.dataset.id);
+  if (it.wet) {
+    if (yard.tipped.has(it.id)) return;
+    yard.tipped.add(it.id); yard.left--; yard.pts += 5;
+    b.classList.add('tipped'); b.disabled = true; b.querySelector('.flag').innerHTML = '<span class="chip done">Tipped</span>';
+    if (yard.left === 0) endYard();
+  } else {
+    if (!yard.wrong.includes(it.id)) yard.wrong.push(it.id);
+    yard.pts -= 3; yard.t = Math.max(0, yard.t - 2);
+    b.classList.add('oops'); b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake');
+    b.querySelector('.flag').innerHTML = '<span class="chip">Safe</span>';
+    toast(it.lesson + ' (−2 s)');
+  }
+  $('#yd-pts').textContent = Math.max(0, yard.pts);
+});
+function endYard(){
+  if (yard.over) return;
+  yard.over = true; clearInterval(yard.timer);
+  document.querySelectorAll('#yard .tile').forEach(t => t.disabled = true);
+  const bonus = yard.left === 0 ? Math.min(20, Math.round(yard.t)) : 0;
+  const score = clamp(yard.pts + bonus, 0, 60);
+  pv.a = Math.max(pv.a || 0, score);
+  $('#pvA-pts').innerHTML = '<b>' + pv.a + '</b> / 60 pts';
+  $('#yd-pts').textContent = score;
+  const host = $('#yd-results'); host.innerHTML = '';
+  const cleared = YARD.filter(y => y.wet).length - yard.left;
+  const sum = el('div', 'fb ' + (yard.left === 0 ? 'fb-good' : 'fb-bad'),
+    '<strong>' + (yard.left === 0 ? 'Yard cleared.' : 'Time’s up.') + '</strong> You emptied ' + cleared + ' of 8 breeding sites' +
+    (bonus ? ' with ' + bonus + ' bonus points for time left' : '') + '. About ' + Math.floor(yard.mosq) + ' mosquitoes hatched while you worked. ' +
+    '<br><br><strong>One more step:</strong> <i>Aedes</i> eggs stick to container walls just above the water line and can survive drying out for up to 8 months. Tipping out water isn’t enough. The CDC says to empty and scrub, turn over, cover, or throw out anything that holds water once a week.' + src('cdc-home cdc-aedes'));
+  host.append(sum);
+  const list = el('div', 'results');
+  YARD.forEach(it => {
+    const state = it.wet ? (yard.tipped.has(it.id) ? '<span class="chip done">Tipped</span>' : '<span class="chip" style="color:var(--bite);border-color:var(--bite)">Missed</span>') : '<span class="chip">Safe</span>';
+    list.append(el('div', 'res', state + '<span><b>' + it.name + '.</b> ' + it.lesson + '</span>'));
+  });
+  host.append(list);
+  const row = el('div', 'row'); const again = el('button', 'btn ghost', 'Play Tip &amp; Toss again'); again.type = 'button';
+  again.addEventListener('click', () => { $('#yd-results').innerHTML = ''; $('#yd-time').textContent = '40.0 s'; $('#yd-mosq').textContent = '0'; $('#yd-pts').textContent = '0'; $('#yd-cover').hidden = false; renderYard(false); });
+  row.append(again); host.append(row);
+  checkPreventDone();
+}
+
+const SCEN = [
+  {s:'Afternoon soccer practice in a city with a dengue outbreak.', src:'cdc-bites who-dengue rodriguez', opts:[
+    {t:'Repellent registered with the EPA, such as DEET, picaridin, IR3535 or oil of lemon eucalyptus', ok:true, why:'These ingredients are proven to work when used as directed.'},
+    {t:'A repellent wristband', ok:false, why:'In a lab test, most wearable repellent devices did not reduce how many mosquitoes were attracted to a person.'},
+    {t:'Light, loose long sleeves and pants when you can', ok:true, why:'Less exposed skin means fewer bites.'},
+    {t:'Skip repellent, because mosquitoes only bite at night', ok:false, why:'The mosquitoes that spread dengue are active during the day.'}
+  ]},
+  {s:'Evening campout in August. West Nile virus was just found in local birds.', src:'cdc-bites rodriguez cdc-wnv-cause', opts:[
+    {t:'Repellent on exposed skin', ok:true, why:'EPA-registered repellents protect against the mosquitoes that carry West Nile from birds to people.'},
+    {t:'Permethrin-treated clothing and gear', ok:true, why:'Permethrin goes on fabric only. Never put it directly on skin.'},
+    {t:'A citronella candle next to the tent', ok:false, why:'In a lab test, a citronella candle had no effect on mosquitoes.'},
+    {t:'Keep the tent screen zipped', ok:true, why:'Screens keep mosquitoes out, and holes should be repaired.'}
+  ]},
+  {s:'A family trip to part of South America where yellow fever is a risk.', src:'cdc-yf cdc-yf-vax cdc-bites', opts:[
+    {t:'Get the yellow fever vaccine before the trip', ok:true, why:'CDC recommends it for most US travelers to at-risk parts of Africa and South America. Some countries require proof of vaccination.'},
+    {t:'Pack EPA-registered repellent', ok:true, why:'The vaccine only covers yellow fever. Repellent also helps against dengue, Zika and chikungunya.'},
+    {t:'Bring antibiotics just in case', ok:false, why:'Antibiotics kill bacteria. They do nothing against viruses.'},
+    {t:'Skip the vaccine, since repellent is enough', ok:false, why:'Repellent reduces bites but can’t stop every one. For most people one vaccine dose gives long-lasting protection.'}
+  ]},
+  {s:'Your little brother has dengue and is recovering at home.', src:'cdc-dengue-tx cdc-home', opts:[
+    {t:'Keep him from getting bitten, for example with screens or a bed net', ok:true, why:'During the first week of illness dengue is in his blood, and a mosquito that bites him can pick it up and spread it to the family.'},
+    {t:'Empty and scrub containers that hold water around the house', ok:true, why:'Fewer mosquitoes nearby means fewer chances for the chain to continue.'},
+    {t:'Don’t worry about bites now, since he’s already sick', ok:false, why:'This is exactly when bites matter. He could be the start of the next chain.'},
+    {t:'Give him aspirin or ibuprofen for the pain', ok:false, why:'CDC says to use acetaminophen, and not to take aspirin or ibuprofen.'}
+  ]},
+  {s:'A pregnant relative is planning a trip to an area with a Zika outbreak.', src:'who-zika cdc-bites cdc-zika-prev', opts:[
+    {t:'Talk to a doctor before deciding to go', ok:true, why:'Zika during pregnancy can cause microcephaly and other birth defects.'},
+    {t:'Use EPA-registered repellent', ok:true, why:'Used as directed, these repellents are safe even during pregnancy and breastfeeding.'},
+    {t:'A partner who travels should use condoms', ok:true, why:'Zika can also spread through sex, and condoms lower the chance.'},
+    {t:'Get the Zika vaccine before going', ok:false, why:'There is no Zika vaccine yet.'}
+  ]}
+];
+function initScenarios(){
+  let i = 0, got = 0;
+  const host = $('#scen');
+  function show(){
+    const sc = SCEN[i]; host.innerHTML = '';
+    host.append(el('div', 'scen-top', '<span class="eyebrow">Situation ' + (i + 1) + ' of ' + SCEN.length + '</span><span class="pts">select all that help</span>'));
+    host.append(el('p', 'scen-title', sc.s));
+    const list = el('div', 'opts'); const sel = new Set();
+    const btns = sc.opts.map((o, k) => {
+      const b = el('button', 'opt', '<span class="opt-mark" aria-hidden="true"></span><span>' + o.t + '<span class="why" hidden>' + o.why + '</span></span>');
+      b.type = 'button'; b.setAttribute('aria-pressed', 'false');
+      b.addEventListener('click', () => { if (sel.has(k)) sel.delete(k); else sel.add(k); b.classList.toggle('sel', sel.has(k)); b.setAttribute('aria-pressed', sel.has(k)); });
+      list.append(b); return b;
+    });
+    host.append(list);
+    const row = el('div', 'row'); const chk = el('button', 'btn', 'Check'); chk.type = 'button'; row.append(chk); host.append(row);
+    chk.addEventListener('click', () => {
+      let right = 0;
+      sc.opts.forEach((o, k) => {
+        const b = btns[k]; b.disabled = true; b.classList.remove('sel');
+        b.querySelector('.why').hidden = false;
+        const chosen = sel.has(k);
+        if (chosen && o.ok) { b.classList.add('correct'); right++; }
+        else if (chosen && !o.ok) b.classList.add('wrong');
+        else if (!chosen && o.ok) b.classList.add('missed');
+        else right++;
+      });
+      const pts = Math.round(8 * right / sc.opts.length); got += pts;
+      row.innerHTML = '';
+      row.append(el('span', 'pts', '<b>+' + pts + '</b> of 8 · dashed green = a good option you missed'));
+      host.insertAdjacentHTML('beforeend', src(sc.src));
+      const nx = el('button', 'btn', i < SCEN.length - 1 ? 'Next situation' : 'Finish'); nx.type = 'button';
+      nx.addEventListener('click', () => {
+        if (i < SCEN.length - 1) { i++; show(); }
+        else {
+          pv.b = got; $('#pvB-pts').innerHTML = '<b>' + got + '</b> / 40 pts';
+          host.innerHTML = '';
+          host.append(el('div', 'fb fb-info', '<strong>Protection packed: ' + got + ' / 40.</strong> The pattern: proven repellents, covering up, screens and nets, vaccines where they exist, and removing water. Wristbands and citronella candles don’t work.' + src('cdc-bites cdc-home rodriguez')));
+          const r = el('div', 'row'); const again = el('button', 'btn ghost', 'Replay situations'); again.type = 'button';
+          again.addEventListener('click', () => { i = 0; got = 0; show(); }); r.append(again); host.append(r);
+          checkPreventDone();
+        }
+      });
+      row.prepend(nx);
+    });
+  }
+  show();
+}
+function checkPreventDone(){
+  if (pv.a == null || pv.b == null) return;
+  const pts = pv.a + pv.b; record('prevent', pts);
+  doneBanner('#pv-done', pts, 'diagnose', 'Rule 3: Read the case');
+}
+
+/* ---------- RULE 3: diagnose ---------- */
+const CASES = [
+  { who:'Maya, 16', id:'CASE 01', day:2, chart:[['Temp','39.6 °C'],['Day of fever','2'],['Travel','Back from Puerto Rico 5 days ago']],
+    story:'High fever, a pounding headache, pain behind her eyes, and aching muscles and bones. She feels nauseous.',
+    qs:[
+      {q:'Which virus is most likely?', src:'cdc-dengue-sx cdc-yf', opts:[
+        {t:'Dengue', ok:true, why:'Fever with pain behind the eyes, muscle and bone pain, and nausea after a trip to a place with dengue is the classic picture.'},
+        {t:'West Nile', why:'Most people with West Nile have no symptoms, and it doesn’t usually cause pain behind the eyes.'},
+        {t:'Yellow fever', why:'Yellow fever is found in parts of Africa and South America, not Puerto Rico.'},
+        {t:'Lyme disease', why:'Lyme comes from ticks, not mosquitoes.'}]},
+      {q:'It’s day 2 of her fever. Which tests make the most sense today?', src:'cdc-dengue-dx', opts:[
+        {t:'RT-PCR or NS1 to find the virus, together with an IgM antibody test', ok:true, why:'In the first 7 days, CDC recommends RT-PCR or NS1 paired with an IgM test.'},
+        {t:'An IgM antibody test by itself', why:'Early in illness, antibodies may not show up yet. CDC recommends pairing IgM with RT-PCR or NS1 in the first week.'},
+        {t:'Wait a month, then test', why:'Waiting delays care. The first week is when the virus itself can be found.'},
+        {t:'Catch a mosquito and test it', why:'That tells you about the mosquito, not about Maya.'}]},
+      {q:'Maya’s aches are bad. What should she take for the pain and fever?', src:'cdc-dengue-tx who-dengue', opts:[
+        {t:'Acetaminophen (Tylenol), plus lots of fluids and rest', ok:true, why:'This is what CDC and WHO recommend.'},
+        {t:'Ibuprofen (Advil)', why:'Ibuprofen can increase the risk of bleeding in dengue.'},
+        {t:'Aspirin', why:'Aspirin can increase the risk of bleeding in dengue.'},
+        {t:'Antibiotics', why:'Antibiotics don’t work on viruses.'}]}
+    ]},
+  { who:'Maya, 16', id:'CASE 01 · FOLLOW-UP', day:5, chart:[['Temp','37.2 °C'],['Day of illness','5'],['Test result','NS1 positive: dengue']],
+    story:'Her fever went away yesterday and she thought she was getting better. Today she has strong belly pain, has vomited four times since morning, and her gums bleed when she brushes.',
+    qs:[
+      {q:'What should happen now?', src:'cdc-dengue-sx who-dengue', opts:[
+        {t:'Go to the emergency room now', ok:true, why:'Belly pain, vomiting 3 or more times in 24 hours, and bleeding gums are warning signs of severe dengue. They need immediate care.'},
+        {t:'Rest at home, since the fever is gone', why:'This is the trap. With dengue, warning signs often show up after the fever goes away.'},
+        {t:'Take aspirin for the belly pain', why:'Aspirin raises bleeding risk. She needs a hospital.'},
+        {t:'Wait for another lab result before deciding', why:'Warning signs mean she needs care now, not later.'}]},
+      {q:'Why is the day after the fever breaks so important in dengue?', src:'cdc-dengue-sx', opts:[
+        {t:'Warning signs of severe dengue usually begin 24 to 48 hours after the fever goes away', ok:true, why:'Families should keep watching closely even when the patient seems better.'},
+        {t:'The virus comes back stronger after the fever', why:'The timing matters because of when warning signs usually appear, not because the virus returns.'},
+        {t:'It’s the only day a test works', why:'Different tests work at different times. See the lab cheat sheet.'},
+        {t:'It isn’t important, the illness is over', why:'Warning signs usually begin in the 24 to 48 hours after the fever goes away.'}]}
+    ]},
+  { who:'Jordan, 17', id:'CASE 02', day:10, chart:[['Temp','36.9 °C'],['Day since fever began','10'],['Travel','Brazil, 2 weeks ago']],
+    story:'Had a fever, rash and joint pain last week. Feels fine now. The doctor wants to know what infection it was.',
+    qs:[
+      {q:'It’s day 10. What’s the best test?', src:'cdc-dengue-dx', opts:[
+        {t:'An IgM antibody test on blood', ok:true, why:'After day 7, CDC recommends IgM as the main test. IgM can be found for about 3 months.'},
+        {t:'RT-PCR only', why:'RT-PCR is recommended in the first 7 days. After that, CDC recommends IgM.'},
+        {t:'NS1 antigen test', why:'NS1 indicates infection during the first 7 days of illness.'},
+        {t:'No test is possible after the fever ends', why:'IgM antibodies can be detected for about 3 months.'}]},
+      {q:'His IgM comes back positive for both dengue and Zika. What does that mean?', src:'cdc-dengue-dx', opts:[
+        {t:'Antibodies to related viruses can cross-react, so a confirmation test is needed', ok:true, why:'Dengue and Zika are both flaviviruses. A test called PRNT can sort out false-positive IgM results.'},
+        {t:'He definitely had both at once', why:'Cross-reaction between related viruses is a known limitation of antibody tests.'},
+        {t:'The lab made a mistake', why:'This is a known limitation of antibody tests, not an error.'},
+        {t:'RT-PCR and NS1 tests have the same problem', why:'CDC notes that RT-PCR and NS1 tests do not cross-react with other flaviviruses. The problem is with antibody tests.'}]}
+    ]},
+  { who:'Ms. Alvarez, 27', id:'CASE 03', day:3, chart:[['Temp','37.9 °C'],['Pregnant','20 weeks'],['Travel','Back from an area with a Zika outbreak']],
+    story:'Mild rash, red itchy eyes and achy joints. She feels only a little sick.',
+    qs:[
+      {q:'Her symptoms are mild. Why is testing still important?', src:'who-zika', opts:[
+        {t:'Zika during pregnancy can cause microcephaly and other birth defects', ok:true, why:'WHO estimates 5–15% of babies born to people infected with Zika during pregnancy show complications.'},
+        {t:'Mild symptoms always turn severe', why:'Zika is usually mild for the adult. The concern is the baby.'},
+        {t:'Testing isn’t needed if symptoms are mild', why:'In pregnancy, even mild Zika matters.'},
+        {t:'So she can start the Zika vaccine', why:'No Zika vaccine is available yet.'}]},
+      {q:'When and how should she be tested?', src:'cdc-zika-test who-zika', opts:[
+        {t:'As soon as possible while she has symptoms, with a test that looks for the virus (like RT-PCR)', ok:true, why:'CDC advises testing as soon as possible while symptoms are present. WHO notes that RT-PCR detects the virus in blood or other body fluids.'},
+        {t:'A strep throat test', why:'Strep is a bacterial throat infection, which is the wrong target.'},
+        {t:'Only after the rash is completely gone', why:'Testing works best while she still has symptoms.'},
+        {t:'Wait until the baby is born', why:'Testing now allows monitoring during the pregnancy.'}]}
+    ]},
+  { who:'Mr. Okafor, 68', id:'CASE 04', day:4, chart:[['Temp','39.1 °C'],['Location','Colorado, late August'],['Travel','None']],
+    story:'Gardens every evening. Fever, very bad headache, stiff neck, and today he seems confused.',
+    qs:[
+      {q:'Which virus is most likely?', src:'cdc-wnv cdc-wnv-sx', opts:[
+        {t:'West Nile', ok:true, why:'It’s the leading mosquito-borne disease in the contiguous US. His age raises the risk of illness affecting the brain.'},
+        {t:'Dengue', why:'He hasn’t traveled, and dengue isn’t normally spread in Colorado.'},
+        {t:'Zika', why:'He hasn’t traveled, and Zika is usually mild.'},
+        {t:'Chikungunya', why:'Chikungunya mainly causes fever and joint pain, and he hasn’t traveled.'}]},
+      {q:'Confusion and a stiff neck mean the virus may have reached his brain. What’s the right first test?', src:'cdc-wnv-dx', opts:[
+        {t:'West Nile IgM antibody test on blood and/or spinal fluid', ok:true, why:'This is CDC’s recommended first test. Positive results should be confirmed because of cross-reacting antibodies.'},
+        {t:'NS1 antigen test', why:'NS1 is a dengue test.'},
+        {t:'Chest X-ray', why:'This isn’t a lung problem.'},
+        {t:'No test. Just wait.', why:'Confusion is an emergency. He needs a hospital and testing now.'}]},
+      {q:'Should his family worry that mosquitoes will pick up the virus from him?', src:'cdc-wnv-cause', opts:[
+        {t:'No. People are dead-end hosts for West Nile.', ok:true, why:'The family should still avoid bites, because the local birds and mosquitoes are carrying the virus.'},
+        {t:'Yes, just like dengue', why:'People don’t develop enough virus in their blood to infect mosquitoes with West Nile.'},
+        {t:'Only if he gets bitten at night', why:'Time of day doesn’t matter. People don’t carry enough virus to infect mosquitoes.'},
+        {t:'Yes, but only for one day', why:'People don’t infect mosquitoes with West Nile at any point.'}]}
+    ]},
+  { who:'Kai, 15', id:'CASE 05', day:3, chart:[['Temp','39.4 °C'],['Day of fever','3'],['Travel','Back from India 1 week ago']],
+    story:'Fever with joint pain so bad in both wrists and ankles that Kai can’t open a water bottle.',
+    qs:[
+      {q:'Which virus is most likely?', src:'cdc-chik-sx who-chik', opts:[
+        {t:'Chikungunya', ok:true, why:'Fever and severe joint pain are its most common symptoms. The name comes from the Kimakonde language and means “that which bends up,” describing people bent over by joint pain.'},
+        {t:'West Nile', why:'Most West Nile infections have no symptoms, and severe joint pain isn’t typical.'},
+        {t:'Yellow fever', why:'Yellow fever is found in parts of Africa and South America.'},
+        {t:'Strep throat', why:'That’s a bacterial throat infection.'}]},
+      {q:'What should Kai expect?', src:'cdc-chik-sx who-chik', opts:[
+        {t:'The joint pain may last weeks or even months', ok:true, why:'Joint pain can be severe and disabling and may last for months, so follow-up care matters.'},
+        {t:'It clears in one day', why:'Joint pain often lasts much longer than the fever.'},
+        {t:'A medicine will cure it fast', why:'CDC notes there are no medicines to treat chikungunya. Care focuses on rest, fluids and pain relief.'},
+        {t:'Lifelong paralysis is expected', why:'That isn’t typical, though joints may stay sore for a long time.'}]}
+    ]}
+];
+let dx = { ci:0, qi:0, right:0 };
+const DX_TOTAL = CASES.reduce((a, c) => a + c.qs.length, 0);
+function initDx(){ dx = { ci:0, qi:0, right:0 }; $('#dx-part').hidden = false; $('#dx-done').innerHTML = ''; renderCase(); }
+function drawTimeline(day){
+  const X = d => 170 + d / 21 * 450;
+  let g = '';
+  g += '<rect x="' + X(3) + '" y="18" width="' + (X(7) - X(3)) + '" height="166" style="fill:var(--bite);opacity:.08"/>';
+  g += '<text class="ax" x="' + X(5) + '" y="14" text-anchor="middle">warning signs often start</text>';
+  const rows = [
+    ['Fever', 0, 7, 'var(--bite)', .55],
+    ['RT-PCR (virus)', 0, 7, 'var(--water)', 1],
+    ['NS1 (dengue protein)', 0, 7, 'var(--water)', .5],
+    ['IgM antibodies', 4, 21, 'var(--amber-fill)', 1]
+  ];
+  rows.forEach((r, i) => {
+    const y = 32 + i * 38;
+    g += '<text class="axl" x="10" y="' + (y + 13) + '">' + r[0] + '</text>';
+    g += '<line class="grid" x1="' + X(0) + '" x2="' + X(21) + '" y1="' + (y + 9) + '" y2="' + (y + 9) + '"/>';
+    g += '<rect x="' + X(r[1]) + '" y="' + y + '" width="' + (X(r[2]) - X(r[1])) + '" height="18" rx="4" style="fill:' + r[3] + ';opacity:' + r[4] + '"/>';
+  });
+  g += '<text class="ax" x="' + (X(21) - 4) + '" y="' + (32 + 3 * 38 + 13) + '" text-anchor="end" style="fill:var(--ink)">lasts ~3 months →</text>';
+  [0, 3, 5, 7, 10, 14, 21].forEach(d => { g += '<text class="ax" x="' + X(d) + '" y="200" text-anchor="middle">' + d + '</text>'; });
+  g += '<text class="axl" x="10" y="200">Day of illness</text>';
+  if (day != null) {
+    g += '<line x1="' + X(day) + '" x2="' + X(day) + '" y1="22" y2="186" style="stroke:var(--ink);stroke-width:2"/>';
+    g += '<text x="' + X(day) + '" y="216" text-anchor="middle" class="ink" style="font-family:var(--f-mono);font-size:12px;font-weight:600">today: day ' + day + '</text>';
+  }
+  $('#tl-svg').innerHTML = g;
+}
+function renderCase(){
+  const c = CASES[dx.ci];
+  $('#dx-progress').textContent = 'Case file ' + (dx.ci + 1) + ' of ' + CASES.length;
+  $('#dx-chart').innerHTML = '<div class="ch-head"><div class="id">' + c.id + '</div><div class="who">' + c.who + '</div></div><dl>' +
+    c.chart.map(r => '<dt>' + r[0] + '</dt><dd class="mono">' + r[1] + '</dd>').join('') + '</dl><p class="story">' + c.story + '</p>';
+  drawTimeline(c.day);
+  renderDxQ();
+}
+function renderDxQ(){
+  const c = CASES[dx.ci], q = c.qs[dx.qi], nx = $('#dx-next');
+  nx.hidden = true;
+  mcq($('#dx-q'), q, ok => {
+    if (ok) dx.right++;
+    $('#dx-pts').innerHTML = '<b>' + dx.right + '</b> of ' + DX_TOTAL + ' correct';
+    const lastQ = dx.qi === c.qs.length - 1, lastC = dx.ci === CASES.length - 1;
+    nx.textContent = lastQ && lastC ? 'See my results' : lastQ ? 'Next case file' : 'Next question';
+    nx.hidden = false; nx.focus({preventScroll:true});
+  });
+}
+$('#dx-next').addEventListener('click', () => {
+  const c = CASES[dx.ci];
+  if (dx.qi < c.qs.length - 1) { dx.qi++; renderDxQ(); }
+  else if (dx.ci < CASES.length - 1) { dx.ci++; dx.qi = 0; renderCase(); $('#dx-part').scrollIntoView({behavior: reduced ? 'auto' : 'smooth', block:'start'}); }
+  else {
+    const pts = Math.round(100 * dx.right / DX_TOTAL);
+    record('diagnose', pts);
+    $('#dx-part').hidden = true;
+    drawTimeline(null);
+    const host = $('#dx-done'); host.innerHTML = '';
+    host.append(el('div', 'part', '<h3>Case files closed</h3><p class="sub" style="margin-top:8px">You got ' + dx.right + ' of ' + DX_TOTAL + ' right. Key ideas: in the first week, test for the virus (RT-PCR, NS1). After that, test for antibodies (IgM), and remember that related viruses can cross-react. With dengue, warning signs usually start 24 to 48 hours after the fever goes away.</p>' + src('cdc-dengue-dx cdc-dengue-sx')));
+    const r = el('div', 'row'); const again = el('button', 'btn ghost', 'Review the cases again'); again.type = 'button';
+    again.addEventListener('click', initDx); r.append(again); host.lastChild.append(r);
+    const holder = el('div'); holder.id = 'dx-done-b'; host.append(holder); doneBanner('#dx-done-b', pts, 'final', 'Outbreak drill');
+  }
+});
+
+/* ---------- FINAL ---------- */
+const FINAL = [
+  {q:'Why do only female Aedes mosquitoes bite?', src:'cdc-aedes', opts:[{t:'They need blood to make eggs', ok:true},{t:'Males don’t have mouths'},{t:'Females are bigger and hungrier'},{t:'To spread viruses on purpose'}]},
+  {q:'When are the mosquitoes that spread dengue most active?', src:'who-dengue', opts:[{t:'During the day',ok:true},{t:'Only at midnight'},{t:'Only in winter'},{t:'Only indoors at night'}], explain:'That’s why protection during the day matters for dengue.'},
+  {q:'How long can Aedes eggs survive without water?', src:'cdc-aedes', opts:[{t:'Up to about 8 months',ok:true},{t:'A few hours'},{t:'One day'},{t:'They can’t survive dry'}], explain:'That’s why you scrub containers, not just empty them.'},
+  {q:'What is the extrinsic incubation period?', src:'cdc-wnv-cause mordecai', opts:[{t:'The time it takes before an infected mosquito can pass the virus on',ok:true},{t:'The time before a person gets symptoms'},{t:'How long a mosquito lives'},{t:'How long eggs take to hatch'}], explain:'The time before a person gets symptoms is the intrinsic incubation period.'},
+  {q:'Across dengue, Zika and chikungunya, transmission is highest at about…', src:'mordecai', opts:[{t:'26–29 °C',ok:true},{t:'10–15 °C'},{t:'35–40 °C'},{t:'Temperature doesn’t matter'}], explain:'Transmission happens between about 18 and 34 °C.'},
+  {q:'Why can’t people pass West Nile back to mosquitoes?', src:'cdc-wnv-cause', opts:[{t:'Too little virus gets into their blood',ok:true},{t:'Mosquitoes don’t bite people'},{t:'The virus dies at body temperature'},{t:'People are always vaccinated'}], explain:'Birds are the hosts that keep the cycle going.'},
+  {q:'Day 2 of fever after a trip to a dengue area. Which tests fit best?', src:'cdc-dengue-dx', opts:[{t:'RT-PCR or NS1, plus an IgM test',ok:true},{t:'IgM antibody test only'},{t:'A strep test'},{t:'No test until day 30'}], explain:'Early on, look for the virus. After day 7, IgM is the main test.'},
+  {q:'Which pain reliever should be used when dengue is possible?', src:'cdc-dengue-tx', opts:[{t:'Acetaminophen',ok:true},{t:'Aspirin'},{t:'Ibuprofen'},{t:'Any of them'}], explain:'Aspirin and ibuprofen can increase bleeding risk.'},
+  {q:'For which virus does a single vaccine dose give most people long-lasting protection?', src:'cdc-yf-vax who-zika', opts:[{t:'Yellow fever',ok:true},{t:'Zika'},{t:'West Nile'},{t:'None of them'}], explain:'For most people a booster isn’t needed. There is no Zika vaccine yet.'},
+  {q:'Wolbachia is being used to fight dengue. What is it?', src:'utarini', opts:[{t:'A bacterium that makes mosquitoes less likely to be infected with dengue',ok:true},{t:'A new bug spray'},{t:'A dengue vaccine'},{t:'A type of bed net'}], explain:'In Yogyakarta, Indonesia, releasing these mosquitoes cut dengue cases by 77% and dengue hospitalizations by 86%.'}
+];
+function initFinal(){
+  const host = $('#fq');
+  let i = 0, right = 0, streak = 0, best = 0;
+  const qs = shuffle(FINAL.slice());
+  function show(){
+    host.innerHTML = '';
+    const head = el('div', 'qhead', '<span class="eyebrow">Question ' + (i + 1) + ' of ' + qs.length + '</span><span class="streak" id="fq-streak">Streak ' + streak + '</span>');
+    const bar = el('div', 'bar', '<i style="width:' + (i / qs.length * 100) + '%"></i>');
+    const qhost = el('div'); const row = el('div', 'row');
+    host.append(head, bar, qhost, row);
+    mcq(qhost, qs[i], ok => {
+      if (ok) { right++; streak++; best = Math.max(best, streak); } else streak = 0;
+      $('#fq-streak').textContent = 'Streak ' + streak;
+      if (ok && streak >= 3) toast(streak + ' in a row!');
+      const nx = el('button', 'btn', i < qs.length - 1 ? 'Next question' : 'See my score'); nx.type = 'button';
+      nx.addEventListener('click', () => { if (i < qs.length - 1) { i++; show(); } else finish(); });
+      row.append(nx); nx.focus({preventScroll:true});
+    });
+  }
+  function finish(){
+    const pts = right * 10; record('final', pts);
+    const t = total();
+    host.innerHTML = '';
+    host.append(el('p', 'eyebrow', 'Drill complete'));
+    host.append(el('p', 'bigscore', pts + '<span style="font-size:24px;color:var(--muted)"> / 100</span>'));
+    host.append(el('p', 'sub', 'Longest streak: ' + best + '. Your total across all rules is <b>' + t + ' / 400</b>, which earns the rank <b>' + rankName(t) + '</b>.' + (MISSIONS.every(m => S.done[m]) ? '' : ' Play the rules you skipped to raise it.')));
+    const r = el('div', 'row');
+    const again = el('button', 'btn', 'Play the drill again'); again.type = 'button';
+    again.addEventListener('click', initFinal);
+    const home = el('button', 'btn ghost', 'Back to all rules'); home.type = 'button'; home.dataset.go = 'hub';
+    r.append(again, home); host.append(r);
+  }
+  show();
+}
+
+/* ---------- reset ---------- */
+(function(){
+  const b = $('#reset'); let armed = false, t;
+  b.addEventListener('click', () => {
+    if (!armed) { armed = true; b.textContent = 'Click again to erase all scores'; t = setTimeout(() => { armed = false; b.textContent = 'Reset my progress'; }, 4000); return; }
+    clearTimeout(t); armed = false; b.textContent = 'Reset my progress';
+    const sw = S.swats; S = fresh(); S.swats = sw; save(); renderHud(); renderRules(); toast('Progress reset.');
+  });
+})();
+
+renderRefs(); renderHud(); renderRules();
+const h = (location.hash || '').replace('#', '');
+if (['cycle', 'prevent', 'diagnose', 'final'].includes(h)) go(h);
+})();
+</script>
+
+</body>
+</html>
