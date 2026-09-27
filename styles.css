@@ -343,6 +343,15 @@ a:hover { color: var(--carnelian); }
 
 .outreach .pub-venue { max-width: 64ch; }
 
+.pub-soon {
+  margin: 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--carnelian);
+}
+
 /* ---------- contact ---------- */
 
 .contact {
