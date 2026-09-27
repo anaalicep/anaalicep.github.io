@@ -1068,13 +1068,13 @@ function checkPreventDone(){
 
 /* ---------- RULE 3: diagnose ---------- */
 const CASES = [
-  { who:'Maya, 16', id:'CASE 01', day:2, chart:[['Temp','39.6 °C'],['Day of fever','2'],['Travel','Back 5 days ago from an area with confirmed arbovirus cases']],
+  { who:'Maya, 16', id:'CASE 01', day:2, chart:[['Temp','39.6 °C'],['Day of fever','2'],['Travel','Back 5 days ago from the Caribbean, where arbovirus cases are confirmed']],
     story:'High fever, a pounding headache, pain behind her eyes, and aching muscles and bones. She feels nauseous.',
     qs:[
       {q:'Which virus is most likely?', src:'cdc-dengue-sx cdc-yf', opts:[
         {t:'Dengue', ok:true, why:'Arboviruses are viruses spread by insects like mosquitoes, and several of them cause fever. Pain behind the eyes, muscle and bone pain, and nausea together are the classic dengue picture.'},
         {t:'West Nile', why:'Most people with West Nile have no symptoms, and it doesn’t usually cause pain behind the eyes.'},
-        {t:'Yellow fever', why:'Yellow fever is only found in parts of Africa and South America, and pain behind the eyes with bone pain points more to dengue.'},
+        {t:'Yellow fever', why:'Yellow fever is found in parts of Africa and South America, not the Caribbean.'},
         {t:'Lyme disease', why:'Lyme comes from ticks, not mosquitoes.'}]},
       {q:'It’s day 2 of her fever. Which tests make the most sense today?', src:'cdc-dengue-dx', opts:[
         {t:'RT-PCR or NS1 to find the virus, together with an IgM antibody test', ok:true, why:'In the first 7 days, CDC recommends RT-PCR or NS1 paired with an IgM test.'},
@@ -1101,7 +1101,7 @@ const CASES = [
         {t:'It’s the only day a test works', why:'Different tests work at different times. See the lab cheat sheet.'},
         {t:'It isn’t important, the illness is over', why:'Warning signs usually begin in the 24 to 48 hours after the fever goes away.'}]}
     ]},
-  { who:'Jordan, 17', id:'CASE 02', day:10, chart:[['Temp','36.9 °C'],['Day since fever began','10'],['Travel','Back 2 weeks ago from an area with confirmed arbovirus cases']],
+  { who:'Jordan, 17', id:'CASE 02', day:10, chart:[['Temp','36.9 °C'],['Day since fever began','10'],['Travel','Back 2 weeks ago from South America, where arbovirus cases are confirmed']],
     story:'Had a fever, rash and joint pain last week. Feels fine now. The doctor wants to know what infection it was.',
     qs:[
       {q:'It’s day 10. What’s the best test?', src:'cdc-dengue-dx', opts:[
@@ -1148,13 +1148,13 @@ const CASES = [
         {t:'Only if he gets bitten at night', why:'Time of day doesn’t matter. People don’t carry enough virus to infect mosquitoes.'},
         {t:'Yes, but only for one day', why:'People don’t infect mosquitoes with West Nile at any point.'}]}
     ]},
-  { who:'Kai, 15', id:'CASE 05', day:3, chart:[['Temp','39.4 °C'],['Day of fever','3'],['Travel','Back 1 week ago from an area with confirmed arbovirus cases']],
+  { who:'Kai, 15', id:'CASE 05', day:3, chart:[['Temp','39.4 °C'],['Day of fever','3'],['Travel','Back 1 week ago from South Asia, where arbovirus cases are confirmed']],
     story:'Fever with joint pain so bad in both wrists and ankles that Kai can’t open a water bottle.',
     qs:[
       {q:'Which virus is most likely?', src:'cdc-chik-sx who-chik', opts:[
         {t:'Chikungunya', ok:true, why:'Fever and severe joint pain are its most common symptoms. The name comes from the Kimakonde language and means “that which bends up,” describing people bent over by joint pain.'},
         {t:'West Nile', why:'Most West Nile infections have no symptoms, and severe joint pain isn’t typical.'},
-        {t:'Yellow fever', why:'Severe joint pain in both wrists and ankles is the hallmark of chikungunya, not yellow fever.'},
+        {t:'Yellow fever', why:'Yellow fever is found in parts of Africa and South America, not Asia.'},
         {t:'Strep throat', why:'That’s a bacterial throat infection.'}]},
       {q:'What should Kai expect?', src:'cdc-chik-sx who-chik', opts:[
         {t:'The joint pain may last weeks or even months', ok:true, why:'Joint pain can be severe and disabling and may last for months, so follow-up care matters.'},
