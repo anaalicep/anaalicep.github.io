@@ -65,7 +65,7 @@ window.BC_I18N.pt = {
     'ft.teachers': 'Para professores',
     'ft.p1': 'Pensado para o ensino médio. Reserve de 35 a 45 minutos para as três regras e o simulado final, que podem ser jogados em qualquer ordem. O progresso fica salvo só no navegador de cada aluno. A tabela do guia de campo funciona bem como ponto de partida para discussões em sala.',
     'ft.p2': 'Toda resposta do jogo mostra de onde vem a informação. Os números pequenos levam à lista completa de referências, que está em inglês. As fontes foram conferidas em setembro de 2026.',
-    'ft.credit': 'Criado por <a href="/">Ana Alice Pimenta Pereira</a>, Universidade Cornell.',
+    'ft.credit': 'Criado por <a href="/">Ana Alice Pimenta Pereira</a>.',
     'refsTitle': 'Referências',
     'k.eyebrow': 'Além do jogo · Carreiras',
     'k.title': 'Quebre a cadeia na vida real',

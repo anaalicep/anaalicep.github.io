@@ -65,7 +65,7 @@ window.BC_I18N.es = {
     'ft.teachers': 'Para docentes',
     'ft.p1': 'Pensado para estudiantes de 14 a 18 años. Calcula de 35 a 45 minutos para las tres reglas y el simulacro final, que se pueden jugar en cualquier orden. El progreso se guarda solo en el navegador de cada estudiante. La tabla de la guía de campo funciona muy bien como punto de partida para conversar en clase.',
     'ft.p2': 'Cada respuesta del juego muestra de dónde viene la información. Los números pequeños llevan a la lista completa de referencias, que está en inglés. Las fuentes se revisaron en septiembre de 2026.',
-    'ft.credit': 'Creado por <a href="/">Ana Alice Pimenta Pereira</a>, Universidad Cornell.',
+    'ft.credit': 'Creado por <a href="/">Ana Alice Pimenta Pereira</a>.',
     'refsTitle': 'Referencias',
     'k.eyebrow': 'Más allá del juego · Carreras',
     'k.title': 'Rompe la cadena en la vida real',
