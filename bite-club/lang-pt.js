@@ -322,3 +322,36 @@ window.BC_I18N.pt = {
     { q: 'A Wolbachia está sendo usada contra a dengue. O que ela é?', opts: ['Uma bactéria que deixa os mosquitos menos propensos a se infectar com dengue', 'Um novo repelente', 'Uma vacina contra a dengue', 'Um tipo de mosquiteiro'], explain: 'Em Yogyakarta, na Indonésia, soltar esses mosquitos reduziu os casos de dengue em 77% e as internações por dengue em 86%.' }
   ]
 };
+
+/* Careers page */
+Object.assign(window.BC_I18N.pt.html, {
+  'h.careersBtn': 'Carreiras',
+  'k.eyebrow': 'Além do jogo · Carreiras',
+  'k.title': 'Quebre a cadeia de verdade',
+  'k.intro': 'Seu nível no Bite Club é uma etapa de uma carreira real em pesquisa. As pessoas que rastreiam, estudam e combatem esses vírus começaram onde você está agora.',
+  'k.pathTitle': 'Seu caminho',
+  'k.pathSub': 'Os quatro níveis do jogo correspondem às etapas de uma carreira em pesquisa.',
+  'k.cardsTitle': 'Carreiras na cadeia',
+  'k.cardsSub': 'Cada uma dessas profissões usa algo que você praticou no jogo.',
+  'k.note': 'As informações sobre carreiras vêm do Departamento de Estatísticas do Trabalho dos EUA (BLS) e de sociedades profissionais, e os links estão em inglês. A formação muda de país para país, então converse com um orientador da escola ou com um cientista perto de você.'
+});
+Object.assign(window.BC_I18N.pt.ui, {
+  careersLink: 'Ver carreiras →', exploreCareers: 'Ver carreiras', youAreHere: 'Você está aqui', stage: 'Etapa {n}',
+  ptsRange: '{a}–{b} pts', learnMore: 'Saiba mais', trainLabel: 'Formação: '
+});
+window.BC_I18N.pt.stages = [
+  { when: 'No ensino médio', text: 'Estude biologia, química e matemática. Participe de feiras e clubes de ciências, ou pergunte à secretaria de saúde da sua cidade sobre visitas e voluntariado.' },
+  { when: 'Na faculdade', text: 'Estude biologia, microbiologia, entomologia, química ou saúde pública. Procure estágios de pesquisa, incluindo trabalho de campo capturando mosquitos.' },
+  { when: 'Início de carreira', text: 'Trabalhe como técnico de laboratório ou de campo, profissional de saúde pública ou assistente de pesquisa. Muitas pessoas fazem mestrado nesta etapa, o nível de entrada típico para epidemiologistas nos EUA.' },
+  { when: 'Liderando pesquisas', text: 'Conduza seus próprios estudos como cientista com doutorado ou formação em medicina ou medicina veterinária. Alguns programas combinam dois títulos, como medicina veterinária e doutorado.' }
+];
+window.BC_I18N.pt.careers = [
+  { t: 'Virologista', tag: 'Regra 1 · O ciclo', d: 'Estuda como os vírus são formados, como se multiplicam e como causam doenças, incluindo como passam pelos mosquitos.', train: 'Graduação para começar no laboratório. Quem lidera pesquisas geralmente tem doutorado.', org: 'Departamento de Estatísticas do Trabalho dos EUA' },
+  { t: 'Entomologista médico', tag: 'Regras 1 e 2', d: 'Estuda os insetos que transmitem doenças: onde os mosquitos se reproduzem, quais espécies carregam quais vírus e como a temperatura os afeta.', train: 'Graduação em biologia ou entomologia, muitas vezes seguida de pós-graduação.', org: 'Sociedade Entomológica da América' },
+  { t: 'Especialista em controle de mosquitos', tag: 'Regra 2 · Prevenção', d: 'Encontra e elimina criadouros, captura mosquitos e os testa para vírus, e coordena programas locais de controle.', train: 'Muitas pessoas começam como técnicos de campo e passam a supervisionar programas.', org: 'Associação Americana de Controle de Mosquitos' },
+  { t: 'Epidemiologista', tag: 'Regras 2 e 3', d: 'Investiga os padrões e as causas das doenças: onde os surtos começam, quem adoece e o que interrompe a transmissão.', train: 'Geralmente mestrado, muitas vezes em saúde pública.', org: 'Departamento de Estatísticas do Trabalho dos EUA' },
+  { t: 'Cientista de laboratório clínico', tag: 'Regra 3 · Diagnóstico', d: 'Faz os exames que diagnosticam infecções, como RT-PCR, NS1 e IgM.', train: 'Graduação.', org: 'Departamento de Estatísticas do Trabalho dos EUA' },
+  { t: 'Cientista biomédico', tag: 'Todas as regras', d: 'Faz pesquisas para melhorar a saúde humana, como desenvolver vacinas ou testar novas formas de controlar mosquitos.', train: 'Geralmente doutorado, formação em medicina, ou os dois.', org: 'Departamento de Estatísticas do Trabalho dos EUA' },
+  { t: 'Médico veterinário', tag: 'Saúde Única', d: 'Cuida da saúde dos animais e protege a saúde pública. O Nilo Ocidental, por exemplo, circula em aves e também infecta cavalos.', train: 'Graduação em medicina veterinária.', org: 'Departamento de Estatísticas do Trabalho dos EUA' },
+  { t: 'Educador em saúde', tag: 'Regra 2 · Prevenção', d: 'Ensina comunidades a se protegerem, como nas lições deste jogo.', train: 'Pelo menos uma graduação, geralmente em educação ou promoção da saúde.', org: 'Departamento de Estatísticas do Trabalho dos EUA' }
+];

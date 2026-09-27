@@ -273,6 +273,27 @@ sup.cite a:hover{text-decoration:underline}
 .refs li{padding-left:4px;scroll-margin-top:90px}
 .refs li:target{background:var(--amber-soft);border-radius:4px}
 .refs a{word-break:break-word}
+/* careers */
+.rank a{color:var(--water);font-weight:600;text-decoration:none;white-space:nowrap}
+.rank a:hover{text-decoration:underline}
+.path{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media (max-width:860px){.path{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:480px){.path{grid-template-columns:1fr}}
+.stage{display:grid;gap:6px;align-content:start;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--surface-2)}
+.stage.here{border:2px solid var(--water);background:var(--water-soft)}
+.stage .when{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.stage .rn{font-family:var(--f-display);font-weight:700;font-size:21px;line-height:1.1}
+.stage .range{font-family:var(--f-mono);font-size:12px;color:var(--water);font-variant-numeric:tabular-nums}
+.stage p{font-size:15px;line-height:1.45}
+.stage .chip{justify-self:start}
+.careers{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:16px}
+@media (max-width:700px){.careers{grid-template-columns:1fr}}
+.career{display:grid;gap:8px;align-content:start;padding:18px 20px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.career .chip{justify-self:start}
+.career h3{font-size:22px}
+.career p{font-size:15px;line-height:1.45}
+.career .train{color:var(--muted);font-size:14px}
+.career a{font-family:var(--f-mono);font-size:13px;color:var(--water)}
 footer{padding-block:28px 48px;color:var(--muted);font-size:14px}
 footer .cols{display:grid;grid-template-columns:1.2fr 1fr;gap:28px}
 @media (max-width:760px){footer .cols{grid-template-columns:1fr}}
@@ -312,6 +333,7 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
         <div class="ctas">
           <button class="btn" type="button" data-go="cycle" data-i18n="h.start">Start with Rule 1</button>
           <a class="btn ghost" href="#guide" data-i18n="h.guideBtn">Field guide</a>
+          <button class="btn ghost" type="button" data-go="careers" data-i18n="h.careersBtn">Careers</button>
         </div>
       </div>
       <div class="swat" id="swat" data-i18n-aria="swat" role="img" aria-label="A mosquito flying around. Tap it to swat it and reveal a fact.">
@@ -479,6 +501,29 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
   </div>
 </section>
 
+<!-- CAREERS -->
+<section id="view-careers" hidden>
+  <div class="wrap mission">
+    <button class="back" type="button" data-go="hub" data-i18n="back">← All rules</button>
+    <div class="mhead">
+      <p class="eyebrow" data-i18n="k.eyebrow">Beyond the game · Careers</p>
+      <h2 data-i18n="k.title">Break the chain for real</h2>
+      <p data-i18n="k.intro">Your Bite Club rank is a stage on a real research career path. The people who track, study and stop these viruses started where you are now.</p>
+    </div>
+    <div class="part">
+      <div class="part-head"><h3 data-i18n="k.pathTitle">Your path</h3><span class="pts" id="k-rank"></span></div>
+      <p class="sub" data-i18n="k.pathSub">The game’s four ranks match the stages of a research career.</p>
+      <ol class="path" id="k-path"></ol>
+    </div>
+    <div class="part">
+      <div class="part-head"><h3 data-i18n="k.cardsTitle">Careers in the chain</h3></div>
+      <p class="sub" data-i18n="k.cardsSub">Each of these jobs uses something you practiced in this game.</p>
+      <div class="careers" id="k-cards"></div>
+      <p class="note" data-i18n="k.note">Career details come from the US Bureau of Labor Statistics and professional societies. Training paths differ by country, so talk to a school counselor or a scientist near you.</p>
+    </div>
+  </div>
+</section>
+
 <!-- FINAL -->
 <section id="view-final" hidden>
   <div class="wrap mission">
@@ -565,7 +610,9 @@ const EN_UI = {
   question:'Question {i} of {n}', streak:'Streak {n}', inARow:'{n} in a row!', seeScore:'See my score', drillComplete:'Drill complete',
   finalSummary:'Longest streak: {b}. Your total across all rules is <b>{t} / 400</b>, which earns the rank <b>{rank}</b>.',
   skipped:' Play the rules you skipped to raise it.', playDrillAgain:'Play the drill again', backAll:'Back to all rules',
-  resetBtn:'Reset my progress', resetConfirm:'Click again to erase all scores', resetDone:'Progress reset.'
+  resetBtn:'Reset my progress', resetConfirm:'Click again to erase all scores', resetDone:'Progress reset.',
+  careersLink:'Explore careers →', exploreCareers:'Explore careers', youAreHere:'You are here', stage:'Stage {n}',
+  ptsRange:'{a}–{b} pts', learnMore:'Learn more', trainLabel:'Training: '
 };
 window.__t = function(key, vars){ return t(key, vars); };
 function t(key, vars){
@@ -675,7 +722,7 @@ function renderHud(){
   MISSIONS.forEach(m => { const p = el('span', 'pip' + (S.done[m] ? ' on' : '')); p.title = m; pips.append(p); });
   pips.setAttribute('aria-label', t('pipsLabel', {n:MISSIONS.filter(m => S.done[m]).length}));
   $('#total').textContent = t('totalPts', {n:total()});
-  $('#rankLine').innerHTML = t('rankLine', {rank:rankName(total()), n:total()});
+  $('#rankLine').innerHTML = t('rankLine', {rank:rankName(total()), n:total()}) + ' · <a href="#careers" data-go="careers">' + t('careersLink') + '</a>';
 }
 
 const RULE_CARDS = merge([
@@ -694,12 +741,38 @@ function renderRules(){
   });
 }
 
+
+/* ---------- careers ---------- */
+const STAGES = merge([
+  {r:'rank1', a:0, b:149, when:'In high school', text:'Take biology, chemistry and math. Enter science fairs, join a science club, or ask your local health department about tours and volunteering.'},
+  {r:'rank2', a:150, b:249, when:'In college', text:'Study biology, microbiology, entomology, chemistry or public health. Look for summer research jobs, including field work trapping mosquitoes.'},
+  {r:'rank3', a:250, b:339, when:'Early career', text:'Work as a lab or field technician, a public health worker or a research assistant. Many people earn a master’s degree at this stage, the typical entry level for epidemiologists in the US.'},
+  {r:'rank4', a:340, b:400, when:'Leading research', text:'Run your own studies as a scientist with a Ph.D., M.D. or D.V.M. Some programs combine two degrees, such as a D.V.M. and a Ph.D.'}
+], TR.stages);
+const CAREERS = merge([
+  {t:'Virologist', tag:'Rule 1 · The cycle', d:'Studies how viruses are built, how they multiply and how they cause disease, including how they move through mosquitoes.', train:'A bachelor’s degree to start in a lab. People who lead research usually have a Ph.D.', org:'US Bureau of Labor Statistics', url:'https://www.bls.gov/ooh/life-physical-and-social-science/microbiologists.htm'},
+  {t:'Medical entomologist', tag:'Rules 1 and 2', d:'Studies the insects that spread disease: where mosquitoes breed, which species carry which viruses, and how temperature affects them.', train:'A degree in biology or entomology, often followed by graduate school.', org:'Entomological Society of America', url:'https://www.entsoc.org/resources/students/entomology-programs'},
+  {t:'Mosquito control specialist', tag:'Rule 2 · Prevention', d:'Finds and removes breeding sites, traps mosquitoes and tests them for viruses, and runs local control programs.', train:'Many people start as field technicians and move up to supervising programs.', org:'American Mosquito Control Association', url:'https://members.mosquito.org/career-center'},
+  {t:'Epidemiologist', tag:'Rules 2 and 3', d:'Investigates patterns and causes of disease: where outbreaks start, who gets sick, and what stops the spread.', train:'Usually a master’s degree, often in public health.', org:'US Bureau of Labor Statistics', url:'https://www.bls.gov/ooh/life-physical-and-social-science/epidemiologists.htm'},
+  {t:'Clinical laboratory scientist', tag:'Rule 3 · Diagnosis', d:'Runs the tests that diagnose infections, like RT-PCR, NS1 and IgM tests.', train:'A bachelor’s degree.', org:'US Bureau of Labor Statistics', url:'https://www.bls.gov/ooh/healthcare/clinical-laboratory-technologists-and-technicians.htm'},
+  {t:'Medical scientist', tag:'All rules', d:'Does research to improve human health, such as developing vaccines or testing new ways to control mosquitoes.', train:'Usually a Ph.D., a medical degree, or both.', org:'US Bureau of Labor Statistics', url:'https://www.bls.gov/ooh/life-physical-and-social-science/medical-scientists.htm'},
+  {t:'Veterinarian', tag:'One Health', d:'Cares for animal health and protects public health. West Nile, for example, circulates in birds and also infects horses.', train:'A Doctor of Veterinary Medicine (D.V.M.) degree.', org:'US Bureau of Labor Statistics', url:'https://www.bls.gov/ooh/healthcare/veterinarians.htm'},
+  {t:'Health educator', tag:'Rule 2 · Prevention', d:'Teaches communities how to protect themselves, like the lessons in this game.', train:'At least a bachelor’s degree, often in health education or health promotion.', org:'US Bureau of Labor Statistics', url:'https://www.bls.gov/ooh/community-and-social-service/health-educators.htm'}
+], TR.careers);
+function renderCareers(){
+  const tot = total(), cur = tot >= 340 ? 3 : tot >= 250 ? 2 : tot >= 150 ? 1 : 0;
+  $('#k-rank').innerHTML = t('rankLine', {rank:rankName(tot), n:tot});
+  $('#k-path').innerHTML = STAGES.map((s, i) => '<li class="stage' + (i === cur ? ' here" aria-current="step' : '') + '"><span class="when">' + t('stage', {n:i + 1}) + ' · ' + s.when + '</span><span class="rn">' + t(s.r) + '</span><span class="range">' + t('ptsRange', {a:s.a, b:s.b}) + '</span><p>' + s.text + '</p>' + (i === cur ? '<span class="chip done">' + t('youAreHere') + '</span>' : '') + '</li>').join('');
+  $('#k-cards').innerHTML = CAREERS.map(c => '<article class="career"><span class="chip">' + c.tag + '</span><h3>' + c.t + '</h3><p>' + c.d + '</p><p class="train"><b>' + t('trainLabel') + '</b>' + c.train + '</p><a href="' + c.url + '" target="_blank" rel="noopener">' + t('learnMore') + ' · ' + c.org + ' ↗</a></article>').join('');
+}
+
 /* ---------- navigation ---------- */
-const VIEWS = ['hub', 'cycle', 'prevent', 'diagnose', 'final'];
+const VIEWS = ['hub', 'cycle', 'prevent', 'diagnose', 'final', 'careers'];
 const inited = {};
 function go(v){
   if (!VIEWS.includes(v)) v = 'hub';
   VIEWS.forEach(x => { $('#view-' + x).hidden = x !== v; });
+  if (v === 'careers') renderCareers();
   if (!inited[v]) { inited[v] = true; ({cycle:initCycle, prevent:initPrevent, diagnose:initDx, final:initFinal})[v]?.(); }
   try { history.replaceState(null, '', v === 'hub' ? location.pathname + location.search : '#' + v); } catch(e) {}
   window.scrollTo(0, 0);
@@ -1355,8 +1428,9 @@ function initFinal(){
     const r = el('div', 'row');
     const again = el('button', 'btn', t('playDrillAgain')); again.type = 'button';
     again.addEventListener('click', initFinal);
+    const car = el('button', 'btn ghost', t('exploreCareers')); car.type = 'button'; car.dataset.go = 'careers';
     const home = el('button', 'btn ghost', t('backAll')); home.type = 'button'; home.dataset.go = 'hub';
-    r.append(again, home); host.append(r);
+    r.append(again, car, home); host.append(r);
   }
   show();
 }
@@ -1376,7 +1450,7 @@ renderRefs(); renderHud(); renderRules();
 $('#yd-time').textContent = fmt(40, 1) + ' s';
 $('#reset').textContent = t('resetBtn');
 const h = (location.hash || '').replace('#', '');
-if (['cycle', 'prevent', 'diagnose', 'final'].includes(h)) go(h);
+if (['cycle', 'prevent', 'diagnose', 'final', 'careers'].includes(h)) go(h);
 })();
 </script>
 
