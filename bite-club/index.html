@@ -105,6 +105,7 @@ button{font:inherit;color:inherit}
 @media (max-width:700px){.rules{grid-template-columns:1fr}}
 .rule{display:grid;grid-template-columns:auto 1fr;gap:4px 18px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;cursor:pointer;transition:transform .15s,border-color .15s}
 .rule:hover{transform:translateY(-2px);border-color:var(--ink)}
+.rule.no-num{grid-template-columns:1fr}
 .rule .num{grid-row:1/span 3;font-family:var(--f-display);font-weight:700;font-size:56px;line-height:.9;color:var(--water)}
 .rule h3{font-size:24px}
 .rule p{color:var(--muted);font-size:15px}
@@ -594,14 +595,14 @@ const RULE_CARDS = [
   {m:'cycle', n:'1', t:'Know the chain', d:'Put the transmission cycle in order, then find the temperature where mosquitoes are most dangerous.'},
   {m:'prevent', n:'2', t:'Break it early', d:'Clear a yard of breeding sites against the clock, then pick the protection that actually works.'},
   {m:'diagnose', n:'3', t:'Read the case', d:'Six patients, six fevers. Pick the likely virus, the right test for the day, and what happens next.'},
-  {m:'final', n:'F', t:'Outbreak drill', d:'Ten quick questions across everything. Best played after the three rules.'}
+  {m:'final', n:'', t:'Outbreak drill', d:'Ten quick questions across everything. Best played after the three rules.'}
 ];
 function renderRules(){
   const host = $('#rules'); host.innerHTML = '';
   RULE_CARDS.forEach(r => {
-    const b = el('button', 'rule'); b.type = 'button'; b.dataset.go = r.m;
+    const b = el('button', 'rule' + (r.n ? '' : ' no-num')); b.type = 'button'; b.dataset.go = r.m;
     const st = S.done[r.m] ? '<span class="chip done">Best ' + S.scores[r.m] + ' / 100</span>' : '<span class="chip">Not played</span>';
-    b.innerHTML = '<span class="num">' + r.n + '</span><h3>' + r.t + '</h3><p>' + r.d + '</p><div class="status">' + st + '</div>';
+    b.innerHTML = (r.n ? '<span class="num">' + r.n + '</span>' : '') + '<h3>' + r.t + '</h3><p>' + r.d + '</p><div class="status">' + st + '</div>';
     host.append(b);
   });
 }
